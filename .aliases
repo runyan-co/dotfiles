@@ -1,0 +1,44 @@
+# -------------------------------------------------------------- //
+# Aliases
+# -------------------------------------------------------------- //
+
+alias gotop="gotop --color=vice -b"
+alias supervisor="rereadAndRestartSupervisor"
+alias vissh="vi $HOME/.ssh/config"
+alias vizsh="vi $HOME/.zshrc"
+alias srczsh="source $HOME/.zshrc"
+alias lookup="$HOME/Scripts/IpLookup.sh"
+alias bamchmod="stat -f \"%OLp\""
+alias zombies="ps axo stat,ppid,pid,comm | grep -w defunct"
+alias s="brew services"
+alias clr="php artisan redis:flush"
+alias yarn="yarn --scripts-prepend-node-path true"
+alias whichpostgres="cat /usr/local/var/postgres/postmaster.pid"
+alias htop="sudo htop"
+alias phpm="php -i | grep memory_limit"
+
+##
+# Aliases to run function (as defined at top of this file)
+##
+alias killdns="killdns"
+alias start="start"
+alias stop="stop"
+alias restartweb="stop && start | echo \"Web services restarted\" | exit"
+
+##
+# Laravel-related
+##
+alias dump="php artisan dump-server"
+alias ht="a horizon:terminate"
+alias hp="a horizon:purge"
+alias bb="rebuild; clr; c; o; c; p; a horizon:terminate; a horizon:status; gen"
+alias c="a optimize:clear; composer dumpautoload -o"
+alias a="php artisan"
+alias t="a tinker"
+#alias p="cd $HOME/Code/maui-insights-core"
+alias o="cd $HOME/Code"
+alias rebuild="p; a migrate:fresh --force; a db:seed --force; o; a migrate:fresh --force; a db:seed --force; p;"
+alias gen="a assessment:generate"
+
+# Other
+alias lock="m lock"

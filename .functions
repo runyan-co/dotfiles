@@ -1,0 +1,29 @@
+# -------------------------------------------------------------- //
+# Functions
+# -------------------------------------------------------------- //
+
+function killdns() {
+        sudo killall -HUP mDNSResponder;
+        echo "DNS responder service restarted"
+}
+
+function start() {
+        echo "Starting web services...";
+        valet stop && sudo brew services stop --all;
+        brew services start dnsmasq;
+        brew services start postgresql;
+        brew services start redis;
+        brew services start supervisor;
+        valet restart;
+        supervisorctl restart all;
+        brew services list;
+}
+
+function stop() {
+        echo "Stopping running web services...";
+        valet stop && sudo brew services stop --all && brew services stop --all && brew services list;
+}
+
+function rereadAndRestartSupervisor() {
+        supervisorctl reread && supervisorctl update && supervisorctl restart all;
+}
