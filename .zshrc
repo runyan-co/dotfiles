@@ -11,7 +11,7 @@ export PATH=$HOME/.composer/vendor/bin:$PATH
 # Ruby
 export PATH="/usr/local/opt/ruby/bin:$PATH"
 
-# Gemfiles
+# Gemfiles (installed by Homebrew)
 export PATH="/usr/local/lib/ruby/gems/2.7.0/bin:$PATH"
 
 # Custom Zsh Functions
@@ -24,7 +24,7 @@ source "$HOME/.config/dotfiles/.aliases"
 # Oh-My-Zsh Installation Directory
 # -------------------------------------------------------------- //
 
-export ZSH="/Users/agrunyan/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 export LANG=en_US.UTF-8
 
 # -------------------------------------------------------------- //
