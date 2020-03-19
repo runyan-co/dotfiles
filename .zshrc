@@ -5,6 +5,12 @@
 # Local
 export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 
+# UmlWriter
+export PATH=$HOME/Repositories/umlwriter/bin:$PATH
+
+# npm
+export PATH=$HOME/.npm/node_modules/bin:$PATH
+
 # Composer
 export PATH=$HOME/.composer/vendor/bin:$PATH
 

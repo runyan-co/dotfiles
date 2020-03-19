@@ -2,6 +2,12 @@
 # Aliases
 # -------------------------------------------------------------- //
 
+alias cleardns="sudo killall -HUP mDNSResponder"
+alias cloneall="cloneAllRepos"
+alias cu="composer update -o --prefer-dist --no-suggest"
+alias ci="composer i -o --prefer-dist --no-suggest"
+alias vialiases="vi $HOME/.config/dotfiles/.aliases"
+alias vifunctions="vi $HOME/.config/dotfiles/.functions"
 alias gotop="gotop --color=vice -b"
 alias supervisor="rereadAndRestartSupervisor"
 alias vissh="vi $HOME/.ssh/config"
@@ -18,6 +24,11 @@ alias htop="sudo htop"
 alias phpm="php -i | grep memory_limit"
 
 ##
+# Docker-related
+##
+alias dbuild="runDockerComposeUp"
+
+##
 # Aliases to run function (as defined at top of this file)
 ##
 alias killdns="killdns"
@@ -28,17 +39,14 @@ alias restartweb="stop && start | echo \"Web services restarted\" | exit"
 ##
 # Laravel-related
 ##
+alias b="php artisan migrate:fresh && php artisan db:seed"
 alias dump="php artisan dump-server"
 alias ht="a horizon:terminate"
 alias hp="a horizon:purge"
-alias bb="rebuild; clr; c; o; c; p; a horizon:terminate; a horizon:status; gen"
 alias c="a optimize:clear; composer dumpautoload -o"
 alias a="php artisan"
 alias t="a tinker"
-#alias p="cd $HOME/Code/maui-insights-core"
-alias o="cd $HOME/Code"
-alias rebuild="p; a migrate:fresh --force; a db:seed --force; o; a migrate:fresh --force; a db:seed --force; p;"
-alias gen="a assessment:generate"
+alias p="cd $HOME/Code"
 
 # Other
 alias lock="m lock"
