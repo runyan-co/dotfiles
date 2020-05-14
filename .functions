@@ -33,9 +33,19 @@ function start() {
         echo "Starting web services...";
         valet stop && sudo brew services stop --all;
         brew services start dnsmasq;
-        brew services start postgresql;
+        brew services start postgresql@11;
         brew services start redis;
         brew services start supervisor;
+        valet restart;
+        supervisorctl restart all;
+        brew services list;
+}
+
+function startBasic() {
+        echo "Starting basic web services...";
+        valet stop && sudo brew services stop --all;
+        brew services start dnsmasq;
+        brew services start postgresql@11;
         valet restart;
         supervisorctl restart all;
         brew services list;

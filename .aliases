@@ -2,6 +2,10 @@
 # Aliases
 # -------------------------------------------------------------- //
 
+alias processmonitor="sudo /Applications/ProcessMonitor.app/Contents/MacOS/ProcessMonitor -pretty"
+alias filemonitor="sudo /Applications/FileMonitor.app/Contents/MacOS/FileMonitor"
+alias myip="curl -4 ifconfig.co/ip"
+alias prmd="rm -rfP ~/Downloads/* | echo y && exit"
 alias cleardns="sudo killall -HUP mDNSResponder"
 alias cloneall="cloneAllRepos"
 alias cu="composer update -o --prefer-dist --no-suggest"
@@ -21,7 +25,7 @@ alias clr="php artisan redis:flush"
 alias yarn="yarn --scripts-prepend-node-path true"
 alias whichpostgres="cat /usr/local/var/postgres/postmaster.pid"
 alias htop="sudo htop"
-alias phpm="php -i | grep memory_limit"
+alias phpmemory="php -i | grep memory_limit"
 
 ##
 # Docker-related
@@ -33,6 +37,7 @@ alias dbuild="runDockerComposeUp"
 ##
 alias killdns="killdns"
 alias start="start"
+alias startb="startBasic"
 alias stop="stop"
 alias restartweb="stop && start | echo \"Web services restarted\" | exit"
 
