@@ -24,38 +24,44 @@ cloneAll() {
     done
 }
 
-function killdns() {
+function killDns() {
         sudo killall -HUP mDNSResponder;
         echo "DNS responder service restarted"
 }
 
-function start() {
-        echo "Starting web services...";
-        valet stop && sudo brew services stop --all;
-        brew services start dnsmasq;
-        brew services start postgresql@11;
-        brew services start redis;
-        brew services start supervisor;
-        valet restart;
-        supervisorctl restart all;
-        brew services list;
+function stopWebServicesQuiet() {
+        GREEN='\033[0;32m';
+
+	sudo echo "" > /dev/null 2>&1;
+        echo -e "${GREEN}Stopping web services...";
+
+        # Stop all web services using Homebrew
+        valet stop > /dev/null 2>&1;
+        sudo brew services stop dnsmasq > /dev/null 2>&1;
+	brew services stop php > /dev/null 2>&1;
+	brew services stop nginx > /dev/null 2>&1;
+	brew services stop redis > /dev/null 2>&1;
+	brew services stop postgresql > /dev/null 2>&1;
+	brew services stop supervisor > /dev/null 2>&1;
+
+	# Kill any lingering php processes
+	sudo killall -9 php > /dev/null 2>&1;
 }
 
-function startBasic() {
-        echo "Starting basic web services...";
-        valet stop && sudo brew services stop --all;
-        brew services start dnsmasq;
-        brew services start postgresql@11;
-        valet restart;
-        supervisorctl restart all;
-        brew services list;
-}
+function startWebServices() {
+	GREEN='\033[0;32m';
 
-function stop() {
-        echo "Stopping running web services...";
-        valet stop && sudo brew services stop --all && brew services stop --all && brew services list;
-}
+	# Stop any currently running services
+	stopWebServicesQuiet;
+   	
+	# Quietly run postgres, redis, supervisor
+	brew services run postgresql;
+        brew services run redis;
+	brew services run supervisor;
 
-function rereadAndRestartSupervisor() {
-        supervisorctl reread && supervisorctl update && supervisorctl restart all;
+	# Start valet
+        valet start;
+
+	# Show running services
+	brew services list;
 }
