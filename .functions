@@ -32,20 +32,18 @@ function killDns() {
 function stopWebServicesQuiet() {
         GREEN='\033[0;32m';
 
-	sudo echo "" > /dev/null 2>&1;
         echo -e "${GREEN}Stopping web services...";
 
         # Stop all web services using Homebrew
         valet stop > /dev/null 2>&1;
-        sudo brew services stop dnsmasq > /dev/null 2>&1;
-	brew services stop php > /dev/null 2>&1;
+        
+	sudo brew services stop dnsmasq > /dev/null 2>&1;
+	sudo brew services stop php > /dev/null 2>&1;
+
 	brew services stop nginx > /dev/null 2>&1;
 	brew services stop redis > /dev/null 2>&1;
 	brew services stop postgresql > /dev/null 2>&1;
 	brew services stop supervisor > /dev/null 2>&1;
-
-	# Kill any lingering php processes
-	sudo killall -9 php > /dev/null 2>&1;
 }
 
 function startWebServices() {
