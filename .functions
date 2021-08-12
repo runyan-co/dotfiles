@@ -2,6 +2,13 @@
 # Functions
 # -------------------------------------------------------------- //
 
+
+convertVideosToGifs() {
+	for f in ./*.mp4; do
+		ffmpeg -i "$f" -vf scale=320:-1 "${f%.*}.gif"
+	done
+}
+
 runDockerComposeUp() {
     if [[ -d ./docker ]]; then
         cd ./docker
@@ -30,36 +37,31 @@ function killDns() {
 }
 
 function stopWebServicesQuiet() {
+	sudo echo "";
         GREEN='\033[0;32m';
-
-        echo -e "${GREEN}Stopping web services...";
-
-        # Stop all web services using Homebrew
-        valet stop > /dev/null 2>&1;
-        
-	sudo brew services stop dnsmasq > /dev/null 2>&1;
-	sudo brew services stop php > /dev/null 2>&1;
-
-	brew services stop nginx > /dev/null 2>&1;
-	brew services stop redis > /dev/null 2>&1;
-	brew services stop postgresql > /dev/null 2>&1;
-	brew services stop supervisor > /dev/null 2>&1;
+        echo -e "${GREEN}Stopping any running web services...";    
+	sudo brew services stop --quiet dnsmasq > /dev/null 2>&1;
+	sudo brew services stop --quiet php > /dev/null 2>&1;
+	sudo brew services stop --quiet nginx > /dev/null 2>&1;
+	sudo brew services stop --quiet --all > /dev/null 2>&1;
+	brew services stop --quiet --all > /dev/null 2>&1;
+	supervisorctl stop --all --quiet > /dev/null 2>&1;
+	sudo killall -9 php > /dev/null 2>&1;
+	sudo killall -9 postgres > /dev/null 2>&1;
+	brew services list;
 }
 
 function startWebServices() {
 	GREEN='\033[0;32m';
-
-	# Stop any currently running services
-	stopWebServicesQuiet;
-   	
-	# Quietly run postgres, redis, supervisor
-	brew services run postgresql;
-        brew services run redis;
-	brew services run supervisor;
-
-	# Start valet
-        valet start;
-
-	# Show running services
+	echo -e "${GREEN}Stopping any running web services...";
+	stopWebServicesQuiet > /dev/null 2>&1;
+	echo -e "${GREEN}Starting php, dnsmasq, and nginx...";
+	valet start --quiet > /dev/null 2>&1;
+	echo -e "${GREEN}Starting postgres...";
+	brew services run --quiet postgres > /dev/null 2>&1;
+	echo -e "${GREEN}Starting redis...";
+	brew services run --quiet redis > /dev/null 2>&1;
+	echo -e "${GREEN}Starting supervisor...";
+	brew services run --quiet supervisor > /dev/null 2>&1;
 	brew services list;
 }

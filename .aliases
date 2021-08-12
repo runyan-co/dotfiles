@@ -63,7 +63,7 @@ alias gen="php artisan assessment:generate"
 alias hp="a horizon:purge"
 alias ht="a horizon:terminate"
 alias p="cd $HOME/Code"
-alias t="a tinker"
+alias t="a tinker --ansi"
 
 # Other
 alias lock="m lock"
