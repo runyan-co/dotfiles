@@ -25,10 +25,10 @@ plugins=(
 export PATH="/usr/local/sbin:$PATH"
 
 # Yarn
-export PATH="$HOME/.yarn/bin:$PATH"
+#export PATH="$HOME/.yarn/bin:$PATH"
 
 # Composer
-export PATH="$HOME/.composer/vendor/bin:$PATH"
+#export PATH="$HOME/.composer/vendor/bin:$PATH"
 
 # Custom Zsh Functions
 source $HOME/.config/dotfiles/.functions
