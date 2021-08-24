@@ -56,12 +56,13 @@ function startWebServices() {
 	echo -e "${GREEN}Stopping any running web services...";
 	stopWebServicesQuiet > /dev/null 2>&1;
 	echo -e "${GREEN}Starting php, dnsmasq, and nginx...";
-	valet start --quiet > /dev/null 2>&1;
+	valet start;
 	echo -e "${GREEN}Starting postgres...";
-	brew services run --quiet postgres > /dev/null 2>&1;
+	brew services run --quiet postgres;
 	echo -e "${GREEN}Starting redis...";
-	brew services run --quiet redis > /dev/null 2>&1;
+	brew services run --quiet redis;
 	echo -e "${GREEN}Starting supervisor...";
-	brew services run --quiet supervisor > /dev/null 2>&1;
+	brew services run --quiet supervisor;
+	echo -e "${GREEN}Services started!";
 	brew services list;
 }
