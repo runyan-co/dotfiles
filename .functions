@@ -39,10 +39,7 @@ function killDns() {
 function stopWebServicesQuiet() {
 	sudo echo "";
         GREEN='\033[0;32m';
-        echo -e "${GREEN}Stopping any running web services...";    
-	sudo brew services stop --quiet dnsmasq > /dev/null 2>&1;
-	sudo brew services stop --quiet php > /dev/null 2>&1;
-	sudo brew services stop --quiet nginx > /dev/null 2>&1;
+        echo -e "${GREEN}Stopping any running web services...";
 	sudo brew services stop --quiet --all > /dev/null 2>&1;
 	brew services stop --quiet --all > /dev/null 2>&1;
 	supervisorctl stop --all --quiet > /dev/null 2>&1;
