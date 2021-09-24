@@ -21,7 +21,7 @@ alias loadnvm=". /usr/local/opt/nvm/nvm.sh"
 alias log="valet log -f --lines=10"
 alias lookup="$HOME/Scripts/IpLookup.sh"
 alias myip="curl -4 ifconfig.co/ip"
-alias o="p; cd maui"
+alias o="p; cd processmaker"
 alias phpmemory="php -i | grep memory_limit"
 alias prmd="rm -rfP ~/Downloads/* | echo y && exit 0"
 alias s="brew services"
@@ -37,6 +37,26 @@ alias vizsh="vi $HOME/.zshrc"
 alias whichpostgres="cat /usr/local/var/postgres/postmaster.pid"
 alias yarn="yarn --scripts-prepend-node-path true"
 alias zombies="ps axo stat,ppid,pid,comm | grep -w defunct"
+
+##
+# ProcessMaker-related
+##
+function pi() {
+	php artisan processmaker:install --app-debug \
+                                 --telescope \
+                                 --db-username=root \
+                                 --url=http://processmaker.test \
+                                 --password=12345678 \
+                                 --email=alex.runyan@processmaker.test \
+                                 --username=admin \
+                                 --first-name=Alex \
+                                 --last-name=Runyan \
+                                 --redis-client=phpredis;
+	
+	appendVarsToProcessMakerEnvForLocalDev
+}
+
+alias pif="copyFilesToProcessMakerRepoForLocalDev; pi"
 
 ##
 # Docker-related

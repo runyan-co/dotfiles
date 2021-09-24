@@ -2,6 +2,17 @@
 # Functions
 # -------------------------------------------------------------- //
 
+copyFilesToProcessMakerRepoForLocalDev() {
+	cp ~/Snippets/processmaker/laravel-echo-server.json ~/Code/processmaker
+	cp ~/Snippets/processmaker/ScriptDockerBindingFilesTrait.php ~/Code/processmaker/ProcessMaker/Models
+}
+
+appendVarsToProcessMakerEnvForLocalDev() {
+	if [[ -f ~/Code/processmaker/.env ]]; then
+		echo "SESSION_SECURE_COOKIE=false" >> ~/Code/processmaker/.env
+		echo "PROCESSMAKER_SCRIPTS_DOCKER=/usr/local/bin/docker" >> ~/Code/processmaker/.env
+	fi
+}
 
 convertVideosToGifs() {
 	for f in ./*.mp4; do
@@ -42,10 +53,10 @@ function stopWebServicesQuiet() {
         echo -e "${GREEN}Stopping any running web services...";
 	sudo brew services stop --quiet --all > /dev/null 2>&1;
 	brew services stop --quiet --all > /dev/null 2>&1;
-	supervisorctl stop --all --quiet > /dev/null 2>&1;
+	#supervisorctl stop --all --quiet > /dev/null 2>&1;
 	sudo killall -9 php > /dev/null 2>&1;
-	sudo killall -9 postgres > /dev/null 2>&1;
-	brew services list;
+	#sudo killall -9 postgres > /dev/null 2>&1;
+	valet services;
 }
 
 function startWebServices() {
@@ -54,12 +65,10 @@ function startWebServices() {
 	stopWebServicesQuiet > /dev/null 2>&1;
 	echo -e "${GREEN}Starting php, dnsmasq, and nginx...";
 	valet start;
-	echo -e "${GREEN}Starting postgres...";
-	brew services run --quiet postgres;
+	echo -e "${GREEN}Starting mysql@5.7...";
+	brew services run --quiet mysql@5.7;
 	echo -e "${GREEN}Starting redis...";
 	brew services run --quiet redis;
-	echo -e "${GREEN}Starting supervisor...";
-	brew services run --quiet supervisor;
 	echo -e "${GREEN}Services started!";
-	brew services list;
+	valet services;
 }
