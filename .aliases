@@ -41,21 +41,6 @@ alias zombies="ps axo stat,ppid,pid,comm | grep -w defunct"
 ##
 # ProcessMaker-related
 ##
-function pi() {
-	php artisan processmaker:install --app-debug \
-                                 --telescope \
-                                 --db-username=root \
-                                 --url=http://processmaker.test \
-                                 --password=12345678 \
-                                 --email=alex.runyan@processmaker.test \
-                                 --username=admin \
-                                 --first-name=Alex \
-                                 --last-name=Runyan \
-                                 --redis-client=phpredis;
-	
-	appendVarsToProcessMakerEnvForLocalDev
-}
-
 alias pif="copyFilesToProcessMakerRepoForLocalDev; pi"
 
 ##

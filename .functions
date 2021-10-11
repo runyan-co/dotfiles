@@ -2,15 +2,37 @@
 # Functions
 # -------------------------------------------------------------- //
 
+##
+# ProcessMaker-related
+##
+function pi() {
+        php artisan processmaker:install --app-debug \
+                                 --telescope \
+                                 --db-username=root \
+                                 --url=http://processmaker.test \
+                                 --password=12345678 \
+                                 --email=alex.runyan@processmaker.test \
+                                 --username=admin \
+                                 --first-name=Alex \
+                                 --last-name=Runyan \
+                                 --redis-client=phpredis;
+
+        appendVarsToProcessMakerEnvForLocalDev
+}
+
 copyFilesToProcessMakerRepoForLocalDev() {
-	cp ~/Snippets/processmaker/laravel-echo-server.json ~/Code/processmaker
-	cp ~/Snippets/processmaker/ScriptDockerBindingFilesTrait.php ~/Code/processmaker/ProcessMaker/Models
+	#cp ~/Snippets/processmaker/ScriptDockerBindingFilesTrait.php ~/Code/processmaker/ProcessMaker/Models
+	cp ~/Snippets/processmaker/TelescopeServiceProvider.php ~/Code/processmaker/ProcessMaker/Providers
 }
 
 appendVarsToProcessMakerEnvForLocalDev() {
 	if [[ -f ~/Code/processmaker/.env ]]; then
 		echo "SESSION_SECURE_COOKIE=false" >> ~/Code/processmaker/.env
-		echo "PROCESSMAKER_SCRIPTS_DOCKER=/usr/local/bin/docker" >> ~/Code/processmaker/.env
+		echo "LARAVEL_ECHO_SERVER_PROTO=http" >> ~/Code/processmaker/.env
+		echo "LARAVEL_ECHO_SERVER_SSL_KEY=\"\"" >> ~/Code/processmaker/.env
+		echo "LARAVEL_ECHO_SERVER_SSL_CERT=\"\"" >> ~/Code/processmaker/.env
+		echo "API_SSL_VERIFY=0" >> ~/Code/processmaker/.env
+		echo "NODE_BIN_PATH=/usr/local/bin/node" >> ~/Code/processmaker/.env
 	fi
 }
 
