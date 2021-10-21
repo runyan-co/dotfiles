@@ -5,10 +5,31 @@
 ##
 # ProcessMaker-related
 ##
+function pmReset() {
+	cd "$HOME"/code;
+
+	if [ -d ./processmaker ]; then
+		rm -rf ./processmaker;
+	fi
+
+	gcr processmaker
+	cd processmaker
+	composer install -o
+	npm i
+	copyFilesToProcessMakerRepoForLocalDev
+	pi
+	pstorm .
+	supervisorctl restart all
+}
+
 function pi() {
         php artisan processmaker:install --app-debug \
                                  --telescope \
                                  --db-username=root \
+                                 --db-password="" \
+				 --db-host=127.0.0.1 \
+				 --db-port=3306 \
+                                 --db-name=processmaker \
                                  --url=http://processmaker.test \
                                  --password=12345678 \
                                  --email=alex.runyan@processmaker.test \
@@ -16,23 +37,72 @@ function pi() {
                                  --first-name=Alex \
                                  --last-name=Runyan \
                                  --redis-client=phpredis;
-
+	
+	# Append necessary variables to .env file
         appendVarsToProcessMakerEnvForLocalDev
 }
 
+##
+# Require (as composer) all available PM packages
+##
+function composerRequireAllPM() {
+	cd "$HOME"/code/processmaker
+
+	if [ -f "$HOME"/packages/composer/package-list.txt ]; then
+                while read line; do
+			composer require processmaker/"$line" && /usr/local/bin/php artisan "$line":install
+                done <"$HOME"/packages/composer/package-list.txt
+        fi
+}
+
+##
+# Clone all packages from ProcessMaker
+##
+function cloneAllPM() {
+	cd "$HOME"/packages/composer/processmaker
+
+	if [ -f ../package-list.txt ]; then
+		while read line; do
+			GREEN='\033[0;32m'
+			echo -e "${GREEN}Cloning $line..."
+			gcr $line
+			echo "\n"
+		done <../package-list.txt
+	fi
+}
+
+##
+# Clone a ProcessMaker GitHub repo
+function gcr() {
+	git clone https://github.com/ProcessMaker/"$1".git
+}
+
 copyFilesToProcessMakerRepoForLocalDev() {
-	#cp ~/Snippets/processmaker/ScriptDockerBindingFilesTrait.php ~/Code/processmaker/ProcessMaker/Models
-	cp ~/Snippets/processmaker/TelescopeServiceProvider.php ~/Code/processmaker/ProcessMaker/Providers
+	PROCESSMAKER_PATH="$HOME"/code/processmaker
+
+	# Delete any existing symlink to PHPStorms'
+	# settings repository
+	if [ -L "$PROCESSMAKER_PATH"/.idea ]; then
+		rm -rf "$PROCESSMAKER_PATH"/.idea
+	fi
+
+	# Now freshly link it
+	ln -s "$HOME"/.config/dotfiles/.phpstorm/.idea "$PROCESSMAKER_PATH"/.idea
+
+	# Copy local-only versions of files for dev
+	cp "$HOME"/snippets/processmaker/ScriptDockerBindingFilesTrait.php "$PROCESSMAKER_PATH"/ProcessMaker/Models
+	cp "$HOME"/snippets/processmaker/TelescopeServiceProvider.php "$PROCESSMAKER_PATH"/ProcessMaker/Providers
 }
 
 appendVarsToProcessMakerEnvForLocalDev() {
-	if [[ -f ~/Code/processmaker/.env ]]; then
-		echo "SESSION_SECURE_COOKIE=false" >> ~/Code/processmaker/.env
-		echo "LARAVEL_ECHO_SERVER_PROTO=http" >> ~/Code/processmaker/.env
-		echo "LARAVEL_ECHO_SERVER_SSL_KEY=\"\"" >> ~/Code/processmaker/.env
-		echo "LARAVEL_ECHO_SERVER_SSL_CERT=\"\"" >> ~/Code/processmaker/.env
-		echo "API_SSL_VERIFY=0" >> ~/Code/processmaker/.env
-		echo "NODE_BIN_PATH=/usr/local/bin/node" >> ~/Code/processmaker/.env
+	if [[ -f ~/code/processmaker/.env ]]; then
+		# Append other necessary variables
+		echo "SESSION_SECURE_COOKIE=false" >> ~/code/processmaker/.env
+		echo "LARAVEL_ECHO_SERVER_PROTO=http" >> ~/code/processmaker/.env
+		echo "LARAVEL_ECHO_SERVER_SSL_KEY=\"\"" >> ~/code/processmaker/.env
+		echo "LARAVEL_ECHO_SERVER_SSL_CERT=\"\"" >> ~/code/processmaker/.env
+		echo "API_SSL_VERIFY=0" >> ~/code/processmaker/.env
+		echo "NODE_BIN_PATH=/usr/local/bin/node" >> ~/code/processmaker/.env
 	fi
 }
 
@@ -75,9 +145,9 @@ function stopWebServicesQuiet() {
         echo -e "${GREEN}Stopping any running web services...";
 	sudo brew services stop --quiet --all > /dev/null 2>&1;
 	brew services stop --quiet --all > /dev/null 2>&1;
-	#supervisorctl stop --all --quiet > /dev/null 2>&1;
+	supervisorctl stop --all --quiet > /dev/null 2>&1;
 	sudo killall -9 php > /dev/null 2>&1;
-	#sudo killall -9 postgres > /dev/null 2>&1;
+	sudo killall -9 mysql@5.7 > /dev/null 2>&1;
 	valet services;
 }
 
@@ -91,6 +161,8 @@ function startWebServices() {
 	brew services run --quiet mysql@5.7;
 	echo -e "${GREEN}Starting redis...";
 	brew services run --quiet redis;
+        echo -e "${GREEN}Starting supervisor...";
+        brew services run --quiet supervisor;
 	echo -e "${GREEN}Services started!";
 	valet services;
 }
