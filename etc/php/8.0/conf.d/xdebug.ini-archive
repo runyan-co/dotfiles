@@ -1,0 +1,4 @@
+;;
+; XDebug
+;;
+zend_extension="/usr/local/Cellar/php/8.0.10/pecl/20200930/xdebug.so"
