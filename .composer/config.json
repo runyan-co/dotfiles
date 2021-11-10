@@ -1,0 +1,11 @@
+{
+    "repositories": [
+        {
+            "type": "path",
+            "url": "/Users/alex/packages/composer/processmaker/*",
+            "options": {
+                "symlink": true
+            }
+        }
+    ]
+}
