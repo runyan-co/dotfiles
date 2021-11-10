@@ -2,6 +2,28 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$USER_HOME$/packages/composer/processmaker/connector-docusign/.idea/connector-docusign.iml" filepath="$USER_HOME$/packages/composer/processmaker/connector-docusign/.idea/connector-docusign.iml" />
+      <module fileurl="file://$USER_HOME$/packages/composer/processmaker/connector-pdf-print/.idea/connector-pdf-print.iml" filepath="$USER_HOME$/packages/composer/processmaker/connector-pdf-print/.idea/connector-pdf-print.iml" />
+      <module fileurl="file://$USER_HOME$/packages/composer/processmaker/connector-send-email/.idea/connector-send-email.iml" filepath="$USER_HOME$/packages/composer/processmaker/connector-send-email/.idea/connector-send-email.iml" />
+      <module fileurl="file://$USER_HOME$/packages/composer/processmaker/package-actions-by-email/.idea/package-actions-by-email.iml" filepath="$USER_HOME$/packages/composer/processmaker/package-actions-by-email/.idea/package-actions-by-email.iml" />
+      <module fileurl="file://$USER_HOME$/packages/composer/processmaker/package-advanced-user-manager/.idea/package-advanced-user-manager.iml" filepath="$USER_HOME$/packages/composer/processmaker/package-advanced-user-manager/.idea/package-advanced-user-manager.iml" />
+      <module fileurl="file://$USER_HOME$/packages/composer/processmaker/package-auth/.idea/package-auth.iml" filepath="$USER_HOME$/packages/composer/processmaker/package-auth/.idea/package-auth.iml" />
+      <module fileurl="file://$USER_HOME$/packages/composer/processmaker/package-collections/.idea/package-collections.iml" filepath="$USER_HOME$/packages/composer/processmaker/package-collections/.idea/package-collections.iml" />
+      <module fileurl="file://$USER_HOME$/packages/composer/processmaker/package-comments/.idea/package-comments.iml" filepath="$USER_HOME$/packages/composer/processmaker/package-comments/.idea/package-comments.iml" />
+      <module fileurl="file://$USER_HOME$/packages/composer/processmaker/package-conversational-forms/.idea/package-conversational-forms.iml" filepath="$USER_HOME$/packages/composer/processmaker/package-conversational-forms/.idea/package-conversational-forms.iml" />
+      <module fileurl="file://$USER_HOME$/packages/composer/processmaker/package-data-sources/.idea/package-data-sources.iml" filepath="$USER_HOME$/packages/composer/processmaker/package-data-sources/.idea/package-data-sources.iml" />
+      <module fileurl="file://$USER_HOME$/packages/composer/processmaker/package-files/.idea/package-files.iml" filepath="$USER_HOME$/packages/composer/processmaker/package-files/.idea/package-files.iml" />
+      <module fileurl="file://$USER_HOME$/packages/composer/processmaker/package-googleplaces/.idea/package-googleplaces.iml" filepath="$USER_HOME$/packages/composer/processmaker/package-googleplaces/.idea/package-googleplaces.iml" />
+      <module fileurl="file://$USER_HOME$/packages/composer/processmaker/package-process-documenter/.idea/package-process-documenter.iml" filepath="$USER_HOME$/packages/composer/processmaker/package-process-documenter/.idea/package-process-documenter.iml" />
+      <module fileurl="file://$USER_HOME$/packages/composer/processmaker/package-process-optimization/.idea/package-process-optimization.iml" filepath="$USER_HOME$/packages/composer/processmaker/package-process-optimization/.idea/package-process-optimization.iml" />
+      <module fileurl="file://$USER_HOME$/packages/composer/processmaker/package-savedsearch/.idea/package-savedsearch.iml" filepath="$USER_HOME$/packages/composer/processmaker/package-savedsearch/.idea/package-savedsearch.iml" />
+      <module fileurl="file://$USER_HOME$/packages/composer/processmaker/package-sentry/.idea/package-sentry.iml" filepath="$USER_HOME$/packages/composer/processmaker/package-sentry/.idea/package-sentry.iml" />
+      <module fileurl="file://$USER_HOME$/packages/composer/processmaker/package-signature/.idea/package-signature.iml" filepath="$USER_HOME$/packages/composer/processmaker/package-signature/.idea/package-signature.iml" />
+      <module fileurl="file://$USER_HOME$/packages/composer/processmaker/package-translations/.idea/package-translations.iml" filepath="$USER_HOME$/packages/composer/processmaker/package-translations/.idea/package-translations.iml" />
+      <module fileurl="file://$USER_HOME$/packages/composer/processmaker/package-versions/.idea/package-versions.iml" filepath="$USER_HOME$/packages/composer/processmaker/package-versions/.idea/package-versions.iml" />
+      <module fileurl="file://$USER_HOME$/packages/composer/processmaker/package-vocabularies/.idea/package-vocabularies.iml" filepath="$USER_HOME$/packages/composer/processmaker/package-vocabularies/.idea/package-vocabularies.iml" />
+      <module fileurl="file://$USER_HOME$/packages/composer/processmaker/package-webentry/.idea/package-webentry.iml" filepath="$USER_HOME$/packages/composer/processmaker/package-webentry/.idea/package-webentry.iml" />
+      <module fileurl="file://$USER_HOME$/packages/composer/processmaker/packages/.idea/packages.iml" filepath="$USER_HOME$/packages/composer/processmaker/packages/.idea/packages.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/processmaker.iml" filepath="$PROJECT_DIR$/.idea/processmaker.iml" />
     </modules>
   </component>

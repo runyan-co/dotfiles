@@ -14,6 +14,7 @@ alias disableDS_Store="defaults write com.apple.desktopservices DSDontWriteNetwo
 alias d="youtube-dl --format mp4 "
 alias dl="youtube-dl -x --audio-format wav"
 alias enableDS_Store="defaults write com.apple.desktopservices DSDontWriteNetworkStores false"
+alias etc="cd /usr/local/etc"
 alias go="o; pstorm .; start; yarn watch"
 alias gotop="gotop --color=vice -b"
 alias htop="sudo htop"
@@ -70,7 +71,7 @@ alias gen="php artisan assessment:generate"
 alias hp="a horizon:purge"
 alias ht="a horizon:terminate"
 alias p="cd $HOME/code"
-alias pa="cd $HOME/packages"
+alias pa="cd $HOME/packages/composer/processmaker"
 alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
 alias t="a tinker --ansi"
 

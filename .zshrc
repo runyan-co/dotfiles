@@ -24,8 +24,8 @@ plugins=(
 # Homebrew
 export PATH="/usr/local/sbin:$PATH"
 
-# Yarn
-export PATH="$HOME/.yarn/bin:$PATH"
+# MySQL 5.7
+export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
 
 # Composer
 export PATH="$HOME/.composer/vendor/bin:$PATH"
@@ -35,6 +35,9 @@ source $HOME/.config/dotfiles/.functions
 
 # Custom Aliases
 source $HOME/.config/dotfiles/.aliases
+
+# Node Version Manager
+#source $HOME/.config/dotfiles/.nvm
 
 # Zsh
 source $ZSH/oh-my-zsh.sh

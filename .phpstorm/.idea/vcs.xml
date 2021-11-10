@@ -2,5 +2,27 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$USER_HOME$/packages/composer/processmaker/connector-docusign" vcs="Git" />
+    <mapping directory="$USER_HOME$/packages/composer/processmaker/connector-pdf-print" vcs="Git" />
+    <mapping directory="$USER_HOME$/packages/composer/processmaker/connector-send-email" vcs="Git" />
+    <mapping directory="$USER_HOME$/packages/composer/processmaker/package-actions-by-email" vcs="Git" />
+    <mapping directory="$USER_HOME$/packages/composer/processmaker/package-advanced-user-manager" vcs="Git" />
+    <mapping directory="$USER_HOME$/packages/composer/processmaker/package-auth" vcs="Git" />
+    <mapping directory="$USER_HOME$/packages/composer/processmaker/package-collections" vcs="Git" />
+    <mapping directory="$USER_HOME$/packages/composer/processmaker/package-comments" vcs="Git" />
+    <mapping directory="$USER_HOME$/packages/composer/processmaker/package-conversational-forms" vcs="Git" />
+    <mapping directory="$USER_HOME$/packages/composer/processmaker/package-data-sources" vcs="Git" />
+    <mapping directory="$USER_HOME$/packages/composer/processmaker/package-files" vcs="Git" />
+    <mapping directory="$USER_HOME$/packages/composer/processmaker/package-googleplaces" vcs="Git" />
+    <mapping directory="$USER_HOME$/packages/composer/processmaker/package-process-documenter" vcs="Git" />
+    <mapping directory="$USER_HOME$/packages/composer/processmaker/package-process-optimization" vcs="Git" />
+    <mapping directory="$USER_HOME$/packages/composer/processmaker/package-savedsearch" vcs="Git" />
+    <mapping directory="$USER_HOME$/packages/composer/processmaker/package-sentry" vcs="Git" />
+    <mapping directory="$USER_HOME$/packages/composer/processmaker/package-signature" vcs="Git" />
+    <mapping directory="$USER_HOME$/packages/composer/processmaker/package-translations" vcs="Git" />
+    <mapping directory="$USER_HOME$/packages/composer/processmaker/package-versions" vcs="Git" />
+    <mapping directory="$USER_HOME$/packages/composer/processmaker/package-vocabularies" vcs="Git" />
+    <mapping directory="$USER_HOME$/packages/composer/processmaker/package-webentry" vcs="Git" />
+    <mapping directory="$USER_HOME$/packages/composer/processmaker/packages" vcs="Git" />
   </component>
 </project>
