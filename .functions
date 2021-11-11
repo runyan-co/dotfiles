@@ -124,22 +124,35 @@ function pi() {
         appendVarsToProcessMakerEnvForLocalDev
 }
 
+function installBrewCasksFromDotfiles() {
+	cd "$HOME"/.config/dotfiles
+
+	if [ -f ./.brew-casks ]; then
+		while read line; do
+			brew install --cask "$line"
+		done < ./.brew-casks
+	fi
+}
+
+##
+# Remove composer packages
+##
 function composerRemoveAllPM() {
 	cd "$HOME"/code/processmaker
 
-	if [ -f "$HOME"/packages/composer/package-list.txt ]; then
+	if [ -f "$HOME"/packages/composer/.processmaker-packages ]; then
 		while read line; do
                         GREEN='\033[0;32m'
 
                         echo -e "${GREEN}Running package uninstall command...\n"
-                        /usr/local/bin/php artisan "$line":uninstall > /dev/null 2>&1;
+                        /opt/homebrew/bin/php artisan "$line":uninstall > /dev/null 2>&1;
 
                         echo -e "${GREEN}Composer removal of processmaker/$line...\n"
                         composer remove processmaker/"$line" --quiet
 
                         echo "\n"
 
-                done <"$HOME"/packages/composer/package-list.txt
+                done <"$HOME"/packages/composer/.processmaker-packages
         fi
 }
 
@@ -149,7 +162,7 @@ function composerRemoveAllPM() {
 function composerRequireAllPM() {
 	cd "$HOME"/code/processmaker
 
-	if [ -f "$HOME"/packages/composer/package-list.txt ]; then
+	if [ -f "$HOME"/packages/composer/.processmaker-packages ]; then
                 while read line; do
 			GREEN='\033[0;32m'
 			RED='\033[0;31m'
@@ -160,10 +173,10 @@ function composerRequireAllPM() {
 
 			if [ -d ./vendor/processmaker/$line ]; then
                         	echo -e "${GREEN}Running package install command...";
-                        	/usr/local/bin/php artisan "$line":install --no-interaction
+                        	/opt/homebrew/bin/php artisan "$line":install --no-interaction
                         	
 				echo -e "${GREEN}Publishing package assets...";
-                        	/usr/local/bin/php artisan vendor:publish --tag="$line" --no-interaction
+                        	/opt/homebrew/bin/php artisan vendor:publish --tag="$line" --no-interaction
                         
 				echo -e "${GREEN}Package: processmaker/$line installed!";
 			else
@@ -173,7 +186,7 @@ function composerRequireAllPM() {
 
 			echo "\n";
 
-                done <"$HOME"/packages/composer/package-list.txt
+                done <"$HOME"/packages/composer/.processmaker-packages
         fi
 
 	# For some reason, we also need to manually publish
@@ -189,7 +202,7 @@ function composerRequireAllPM() {
 function cloneAllPM() {
 	cd "$HOME"/packages/composer/processmaker
 
-	if [ -f ../package-list.txt ]; then
+	if [ -f ../.processmaker-packages ]; then
 		while read line; do
 			GREEN='\033[0;32m'
 			echo -e "${GREEN}Cloning $line..."
@@ -198,7 +211,7 @@ function cloneAllPM() {
 			git checkout $(getDefaultGitBranchName)
 			cd ..
 			echo "\n"
-		done <../package-list.txt
+		done <../.processmaker-packages
 	fi
 }
 
@@ -235,7 +248,7 @@ copyFilesToProcessMakerRepoForLocalDev() {
 	ln -s "$HOME"/logs "$PROCESSMAKER_PATH"/storage/logs
 
 	# Copy local-only versions of files for dev
-	cp "$HOME"/snippets/processmaker/TelescopeServiceProvider.php "$PROCESSMAKER_PATH"/ProcessMaker/Providers
+	#cp "$HOME"/snippets/processmaker/TelescopeServiceProvider.php "$PROCESSMAKER_PATH"/ProcessMaker/Providers
 }
 
 appendVarsToProcessMakerEnvForLocalDev() {

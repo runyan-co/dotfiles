@@ -22,10 +22,10 @@ plugins=(
 # -------------------------------------------------------------- //
 
 # Homebrew
-export PATH="/usr/local/sbin:$PATH"
+export PATH="/opt/homebrew/sbin:/opt/homebrew/bin$PATH"
 
 # MySQL 5.7
-export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
+export PATH="/opt/homebrew/opt/mysql@5.7/bin:$PATH"
 
 # Composer
 export PATH="$HOME/.composer/vendor/bin:$PATH"
@@ -37,7 +37,7 @@ source $HOME/.config/dotfiles/.functions
 source $HOME/.config/dotfiles/.aliases
 
 # Node Version Manager
-#source $HOME/.config/dotfiles/.nvm
+source $HOME/.config/dotfiles/.nvm
 
 # Zsh
 source $ZSH/oh-my-zsh.sh
