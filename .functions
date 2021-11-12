@@ -132,6 +132,17 @@ function pi() {
 function installBrewCasksFromDotfiles() {
 	cd "$HOME"/.config/dotfiles
 
+	# Turn off Homebrew's analytics
+	brew analytics off 
+
+	# Install cli/formula
+	if [ -f ./.brew-formula ]; then
+                while read line; do
+                        brew install --formula "$line"
+                done < ./.brew-formula
+        fi
+
+	# Install apps (aka casks)
 	if [ -f ./.brew-casks ]; then
 		while read line; do
 			brew install --cask "$line"

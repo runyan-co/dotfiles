@@ -8,7 +8,6 @@ export LANG=en_US.UTF-8
 # -------------------------------------------------------------- //
 # ZSH Options
 # -------------------------------------------------------------- //
-
 ZSH_THEME="robbyrussell"
 COMPLETION_WAITING_DOTS="true"
 

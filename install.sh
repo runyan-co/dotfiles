@@ -16,5 +16,6 @@ fi
 # Check if the .zshrc file is symlinked
 # and link it if it's not
 if [ ! -L ~/.zshrc ]; then
+   rm ~/.zshrc
    ln -s ~/.config/dotfiles/.zshrc ~/.zshrc
 fi
