@@ -207,6 +207,7 @@
       <path value="$PROJECT_DIR$/vendor/aacotroneo/laravel-saml2" />
       <path value="$PROJECT_DIR$/vendor/vyuldashev/xml-to-array" />
       <path value="$PROJECT_DIR$/vendor/theiconic/name-parser" />
+      <path value="$PROJECT_DIR$/vendor/org_heigl/ghostscript" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.4">

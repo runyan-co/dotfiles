@@ -6,30 +6,33 @@
 # ProcessMaker-related
 ##
 function pmReset() {
+	GREEN='\033[0;32m'
+	TEAL='\033[0;36m'
+
 	# Stop running processes
-	echo "Stopping horizon and echo server..."
+	echo -e "${TEAL}Stopping horizon and echo server..."
 	supervisorctl stop all;
 
 	# Flush Redis
-	echo "Flushing Redis..."
+	echo -e "\n${TEAL}Flushing Redis..."
 	redis-cli flushall;
 
 	# Remove/recreate the database
-	echo "Dropping/replacing database..."
+	echo -e "\n${TEAL}Dropping/replacing database..."
 	dropAndCreateProcessMakerDatabase;
 
 	cd "$HOME"/code;
 
 	# Remove the current codebase
 	if [ -d ./processmaker ]; then
-		echo "Removing old codebase..."
+		echo -e "\n${TEAL}Removing old codebase..."
 		rm -rf ./processmaker;
 	fi
 
 	# Clone down the repo and
 	# If an argument is passed, then use that
 	# to represent the desired branch
-	echo "Cloning core repo..."
+	echo -e "\n${TEAL}Cloning core repo..."
 	if [ ! -z "$1" ]; then
 		gcr processmaker "$1";
 	else
@@ -38,29 +41,31 @@ function pmReset() {
 
 	# Install composer dependencies
 	cd processmaker
-	echo "Installing dependencies..."
+	echo -e "\n${TEAL}Installing composer dependencies..."
 	composer install -o --quiet
 
 	# Install npm dependencies
+	echo -e "\n${TEAL}Installing npm dependencies..."
 	npm i
 
 	# Copy over the local versions of a couple
 	# files so we can develop locally
-	echo "Copying local files..."
+	echo -e "\n${TEAL}Copying local files..."
 	copyFilesToProcessMakerRepoForLocalDev
 	
 	# Run the installation process 
 	# (pi is a function defined below)
-	echo "Running artisan installation process..."
+	echo -e "\n${TEAL}Running artisan installation process..."
 	pi
 
 	# Restart horizon
-	echo "Restarting horizon and echo server..."
+	echo -e "\n${TEAL}Restarting horizon and echo server..."
 	supervisorctl start all
 
-	echo "**********************************";
-	echo "*********** Finished! ************";
-	echo "**********************************";
+	echo "\n";
+	echo -e "${GREEN}**********************************";
+	echo -e "${GREEN}*********** Finished! ************";
+	echo -e "${GREEN}**********************************";
 }
 
 ##
@@ -260,7 +265,7 @@ appendVarsToProcessMakerEnvForLocalDev() {
 		# Append other necessary vars
 		echo "SESSION_DRIVER=redis" >> ~/code/processmaker/.env
 		echo "CACHE_DRIVER=redis" >> ~/code/processmaker/.env
-		echo "PROCESSMAKER_SCRIPTS_TIMEOUT=/usr/local/bin/timeout" >> ~/code/processmaker/.env
+		echo "PROCESSMAKER_SCRIPTS_TIMEOUT=/opt/homebrew/bin/timeout" >> ~/code/processmaker/.env
 		echo "DOCKER_HOST_URL=http://host.docker.internal" >> ~/code/processmaker/.env
 		echo "SESSION_SECURE_COOKIE=false" >> ~/code/processmaker/.env
 		echo "SESSION_DOMAIN=processmaker.test" >> ~/code/processmaker/.env
@@ -268,7 +273,7 @@ appendVarsToProcessMakerEnvForLocalDev() {
 		echo "LARAVEL_ECHO_SERVER_SSL_KEY=\"\"" >> ~/code/processmaker/.env
 		echo "LARAVEL_ECHO_SERVER_SSL_CERT=\"\"" >> ~/code/processmaker/.env
 		echo "API_SSL_VERIFY=0" >> ~/code/processmaker/.env
-		echo "NODE_BIN_PATH=/usr/local/bin/node" >> ~/code/processmaker/.env
+		echo "NODE_BIN_PATH=/opt/homebrew/bin/node" >> ~/code/processmaker/.env
 		echo "TELESCOPE_JOB_WATCHER=false" >> ~/code/processmaker/.env
 	fi
 }
