@@ -1,5 +1,26 @@
 {
+    "config": {
+        "allow-plugins": true
+    },
     "repositories": [
+        {
+            "type": "path",
+            "url": "/Users/alex/code/processmaker",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/ProcessMaker/SocialiteProviders"
+        },
+        {
+            "type": "path",
+            "url": "/Users/alex/packages/composer/runyan-co/*",
+            "options": {
+                "symlink": true
+            }
+        },
         {
             "type": "path",
             "url": "/Users/alex/packages/composer/processmaker/*",

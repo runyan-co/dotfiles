@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="LaravelIdeaMainSettings">
-    <option name="appNamespace" value="ProcessMaker" />
-    <option name="frameworkFound" value="true" />
-    <option name="userClassName" value="ProcessMaker\Models\User" />
-  </component>
-</project>

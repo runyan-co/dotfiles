@@ -21,7 +21,10 @@ plugins=(
 # -------------------------------------------------------------- //
 
 # Homebrew
-export PATH="/opt/homebrew/sbin:$PATH"
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+
+# Node
+export PATH="/Users/alex/.nvm/versions/node/v14.4.0/bin:$PATH"
 
 # MySQL 5.7
 export PATH="/opt/homebrew/opt/mysql@5.7/bin:$PATH"
@@ -37,3 +40,7 @@ source $HOME/.config/dotfiles/.aliases
 
 # Zsh
 source $ZSH/oh-my-zsh.sh
+
+# Node Version Manager
+#export NVM_DIR="$HOME/.nvm"
+#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
