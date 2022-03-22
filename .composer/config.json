@@ -4,15 +4,15 @@
     },
     "repositories": [
         {
+            "type": "vcs",
+            "url": "https://github.com/ProcessMaker/SocialiteProviders"
+        },
+        {
             "type": "path",
             "url": "/Users/alex/code/processmaker",
             "options": {
                 "symlink": true
             }
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/ProcessMaker/SocialiteProviders"
         },
         {
             "type": "path",
