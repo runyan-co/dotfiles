@@ -16,6 +16,13 @@
         },
         {
             "type": "path",
+            "url": "/Users/alex/packages/composer/laravel/*",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
             "url": "/Users/alex/packages/composer/runyan-co/*",
             "options": {
                 "symlink": true

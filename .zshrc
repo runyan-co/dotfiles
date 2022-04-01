@@ -27,7 +27,7 @@ export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
 export PATH="/Users/alex/.nvm/versions/node/v14.4.0/bin:$PATH"
 
 # MySQL 5.7
-export PATH="/opt/homebrew/opt/mysql@5.7/bin:$PATH"
+# export PATH="/opt/homebrew/opt/mysql@5.7/bin:$PATH"
 
 # Composer
 export PATH="$HOME/.composer/vendor/bin:$PATH"

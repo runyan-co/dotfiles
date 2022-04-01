@@ -40,6 +40,12 @@ alias yarn="yarn --scripts-prepend-node-path true"
 alias zombies="ps axo stat,ppid,pid,comm | grep -w defunct"
 
 ##
+# Composer-related
+##
+alias composer-off="mv ~/.composer/config.json ~/.composer/config.json.bak; mv ~/.composer/config-default.json ~/.composer/config.json"
+alias composer-on="mv ~/.composer/config.json ~/.composer/config-default.json; mv ~/.composer/config.json.bak ~/.composer/config.json"
+
+##
 # ProcessMaker-related
 ##
 alias pif="copyFilesToProcessMakerRepoForLocalDev; pi"

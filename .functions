@@ -409,14 +409,14 @@ function stopWebServicesQuiet() {
 	brew services stop --quiet --all > /dev/null 2>&1;
 	supervisorctl stop --all --quiet > /dev/null 2>&1 &
 	sudo killall -9 php > /dev/null 2>&1 &
-	sudo killall -9 mysql@5.7 > /dev/null 2>&1 &
+	sudo killall -9 mysql > /dev/null 2>&1 &
 	sudo killall -9 node > /dev/null 2>&1 &
 	wait
 	valet services;
 }
 
 function startWebServices() {
-	brew services run --quiet mysql@5.7 &
+	brew services run --quiet mysql &
 	brew services run --quiet redis &
         brew services run --quiet supervisor &
 	valet start &
