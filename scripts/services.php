@@ -16,14 +16,16 @@ use function \Valet\table;
 
      $statuses = collect();
 
-     foreach (['brew services list', 'sudo brew services list'] as $command) {
+     foreach (['brew services', 'sudo brew services'] as $command) {
          $command = "$command | grep started | awk '{ print $1; print $2; print $3; }'";
 
          $result = CommandLine::runAsUser($command, static function ($exitCode, $output) {
              throw new DomainException('Brew was unable to check which services are running.');
          });
 
-         $statuses->push(collect(array_filter(explode(PHP_EOL, $result)))->chunk(3));
+         $statuses->push(collect(
+             array_filter(explode(PHP_EOL, $result))
+         )->chunk(3));
      }
 
      $cliTableValues = [];
@@ -35,7 +37,7 @@ use function \Valet\table;
              $cliTableValues[] = [
                  'service' => $array->get(0),
                  'status' => $array->get(1),
-                 'user' => $array->get(2)
+                 'user' => \Illuminate\Support\Str::contains($user = $array->get(2), '.plist') ? 'current user': $user
              ];
          }
      }
