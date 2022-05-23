@@ -11,3 +11,4 @@ numprocs=1
 redirect_stderr=true
 stdout_logfile=/Users/alex/logs/%(program_name)s_%(process_num)02d.log
 stopwaitsecs=3600
+environment=PATH="/opt/homebrew/bin:$PATH"

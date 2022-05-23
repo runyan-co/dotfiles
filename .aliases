@@ -2,84 +2,68 @@
 # Aliases
 # -------------------------------------------------------------- //
 
+# don't mess with my aliases ;)
+unalias -a
+
+# Dotfiles
+alias dotfiles="cd $HOME/.config/dotfiles"
+
+# Filesystem
 alias bamchmod="stat -f \"%OLp\""
-alias c="clear"
-alias ci="composer install -o"
-alias cleardns="sudo killall -HUP mDNSResponder"
-alias cloneall="cloneAllRepos"
-alias co="composer dumpautoload -o"
-alias count="find . ! -name . -prune -print | grep -c /"
-alias cu="composer update -o"
-alias disableDS_Store="defaults write com.apple.desktopservices DSDontWriteNetworkStores true"
-alias d="youtube-dl --format mp4 "
-alias dl="youtube-dl -x --audio-format wav"
-alias enableDS_Store="defaults write com.apple.desktopservices DSDontWriteNetworkStores false"
-alias etc="cd /opt/homebrew/etc"
-alias go="o; pstorm .; start; yarn watch"
-alias gotop="gotop --color=vice -b"
-alias htop="sudo htop"
-alias loadnvm=". /usr/local/opt/nvm/nvm.sh"
-alias log="valet log -f --lines=10"
-alias lookup="$HOME/Scripts/IpLookup.sh"
-alias myip="curl -4 ifconfig.co/ip"
+alias cat="bat"
+alias cd="z"
+alias disableDsStore="defaults write com.apple.desktopservices DSDontWriteNetworkStores true"
+alias enableDsStore="defaults write com.apple.desktopservices DSDontWriteNetworkStores false"
 alias o="p; cd processmaker"
-alias phpmemory="php -i | grep memory_limit"
-alias prmd="rm -rfP ~/Downloads/* | echo y && exit 0"
-alias s="valet services"
-alias srczsh="source $HOME/.zshrc"
-alias stopua="sudo killall -9 UA\ Mixer\ Engine"
-alias supervisor="rereadAndRestartSupervisor"
-alias sw1="sudo mv ~/Downloads ~/Downloads.archive && sudo ln -s /Volumes/Additional\ Storage/Downloads ~/Downloads"
-alias sw2="sudo rm -r ~/Downloads && sudo mv ~/Downloads.archive ~/Downloads"
-alias vialiases="vi $HOME/.config/dotfiles/.aliases"
-alias vifunctions="vi $HOME/.config/dotfiles/.functions"
-alias vissh="vi $HOME/.ssh/config"
-alias vizsh="vi $HOME/.zshrc"
-alias whichpostgres="cat /usr/local/var/postgres/postmaster.pid"
-alias yarn="yarn --scripts-prepend-node-path true"
-alias zombies="ps axo stat,ppid,pid,comm | grep -w defunct"
-
-##
-# Composer-related
-##
-alias composer-off="mv ~/.composer/config.json ~/.composer/config.json.bak; mv ~/.composer/config-default.json ~/.composer/config.json"
-alias composer-on="mv ~/.composer/config.json ~/.composer/config-default.json; mv ~/.composer/config.json.bak ~/.composer/config.json"
-
-##
-# ProcessMaker-related
-##
-alias pif="copyFilesToProcessMakerRepoForLocalDev; pi"
-alias runEchoServer="cd $HOME/code/processmaker; npx laravel-echo-server start"
-alias runHorizon="cd $HOME/code/processmaker; php artisan horizon"
-
-##
-# Docker-related
-##
-alias dbuild="runDockerComposeUp"
-
-##
-# Aliases to run function (as defined at top of this file)
-##
-alias killdns="killDns"
-alias restart="stopWebServicesQuiet && startWebServices"
-alias rw="start | echo \"Web services restarted\" | exit"
-alias start="startWebServices"
-alias stop="stopWebServicesQuiet"
-
-##
-# Laravel-related
-##
-alias a="php artisan"
-alias b="php artisan generate:reset --count"
-alias cache="a optimize:clear && a clear-compiled && a redis:flush"
-alias dump="php artisan dump-server"
-alias gen="php artisan assessment:generate"
-alias hp="a horizon:purge"
-alias ht="a horizon:terminate"
 alias p="cd $HOME/code"
 alias pa="cd $HOME/packages/composer/processmaker"
-alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
-alias t="a tinker --ansi"
+alias grep="rg"
+alias ls="exa"
+alias la="exa -ag"
+alias l="exa -lahg"
 
-# Other
-alias lock="m lock"
+# Terminal
+alias c="clear"
+alias srczsh="source $HOME/.zshrc"
+alias vialiases="vi $HOME/.config/dotfiles/.aliases"
+alias vifunctions="vi $HOME/.config/dotfiles/.functions"
+alias vim="nvim"
+alias vissh="vi $HOME/.ssh/config"
+alias vizsh="vi $HOME/.zshrc"
+
+# Misc
+alias d="youtube-dl --format mp4 "
+alias dl="youtube-dl -x --audio-format wav"
+
+# Config
+alias etc="cd /opt/homebrew/etc"
+
+# System admin
+alias gtop="sudo gtop"
+alias htop="gtop"
+alias ps="procs"
+alias s="valet services"
+alias stopua="sudo killall -9 UA\ Mixer\ Engine"
+alias restart="stopWebServicesQuiet && startWebServices"
+alias start="startWebServices"
+alias stop="stopWebServicesQuiet"
+alias zombies="ps axo stat,ppid,pid,comm | grep -w defunct"
+
+# Network
+alias dig="dog"
+alias myip="curl -4 ifconfig.co/ip"
+alias killdns="killDns"
+alias curl="curlie"
+alias ping="gping"
+
+# Composer-related
+alias ci="composer install -o"
+alias co="composer dumpautoload -o"
+alias cu="composer update -o"
+alias c-off="mv ~/.composer/config.json ~/.composer/config.json.bak; mv ~/.composer/config-default.json ~/.composer/config.json"
+alias c-on="mv ~/.composer/config.json ~/.composer/config-default.json; mv ~/.composer/config.json.bak ~/.composer/config.json"
+
+# Laravel
+alias a="php artisan"
+alias dump="php artisan dump-server"
+alias t="a tinker --ansi"

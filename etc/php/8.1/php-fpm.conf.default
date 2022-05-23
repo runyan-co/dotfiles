@@ -3,7 +3,7 @@
 ;;;;;;;;;;;;;;;;;;;;;
 
 ; All relative paths in this configuration file are relative to PHP's install
-; prefix (/opt/homebrew/Cellar/php@7.4/7.4.28_1). This prefix can be dynamically changed by using the
+; prefix (/opt/homebrew/Cellar/php/8.1.6). This prefix can be dynamically changed by using the
 ; '-p' argument from the command line.
 
 ;;;;;;;;;;;;;;;;;;
@@ -48,12 +48,12 @@
 ; logging to a file descriptor. It means the new line character is not present
 ; when logging to syslog.
 ; Default Value: 1024
-log_limit = 4096
+;log_limit = 4096
 
 ; Log buffering specifies if the log line is buffered which means that the
 ; line is written in a single write operation. If the value is false, then the
 ; data is written directly into the file descriptor. It is an experimental
-; option that can potentionaly improve logging performance and memory usage
+; option that can potentially improve logging performance and memory usage
 ; for some heavy logging scenarios. This option is ignored if logging to syslog
 ; as it has to be always buffered.
 ; Default value: yes
@@ -84,7 +84,7 @@ log_limit = 4096
 ; Use it with caution.
 ; Note: A value of 0 indicates no limit
 ; Default Value: 0
-process.max = 128
+; process.max = 128
 
 ; Specify the nice(2) priority to apply to the master process (only if set)
 ; The value can vary from -19 (highest priority) to 20 (lowest priority)
@@ -139,5 +139,5 @@ daemonize = no
 ; file.
 ; Relative path can also be used. They will be prefixed by:
 ;  - the global prefix if it's been set (-p argument)
-;  - /opt/homebrew/Cellar/php@7.4/7.4.28_1 otherwise
-include=/opt/homebrew/etc/php/7.4/php-fpm.d/*.conf
+;  - /opt/homebrew/Cellar/php/8.1.6 otherwise
+include=/opt/homebrew/etc/php/8.1/php-fpm.d/*.conf

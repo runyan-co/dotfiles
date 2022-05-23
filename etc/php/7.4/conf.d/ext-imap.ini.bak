@@ -1,0 +1,2 @@
+[imap]
+extension=/opt/homebrew/opt/php@7.4-imap/lib/php/20190902/imap.so
