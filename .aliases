@@ -39,8 +39,7 @@ alias dl="youtube-dl -x --audio-format wav"
 alias etc="cd /opt/homebrew/etc"
 
 # System admin
-alias gtop="sudo gtop"
-alias htop="gtop"
+alias htop="sudo htop --delay=5"
 alias ps="procs"
 alias s="valet services"
 alias stopua="sudo killall -9 UA\ Mixer\ Engine"
@@ -53,7 +52,7 @@ alias zombies="ps axo stat,ppid,pid,comm | grep -w defunct"
 alias dig="dog"
 alias myip="curl -4 ifconfig.co/ip"
 alias killdns="killDns"
-alias curl="curlie"
+#alias curl="curlie"
 alias ping="gping"
 
 # Composer-related

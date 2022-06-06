@@ -3,320 +3,8 @@
 # -------------------------------------------------------------- //
 
 ##
-# ProcessMaker-related
-##
-function pmReset() {
-	GREEN='\033[0;32m'
-	TEAL='\033[0;36m'
-	RESET='\033[0;0m'
-
-	# Stop running processes
-	echo -e "${TEAL}Stopping horizon and echo server...${RESET}"
-	supervisorctl stop all;
-
-	# Flush Redis
-	echo -e "\n${TEAL}Flushing Redis..."
-	redis-cli flushall;
-
-	# Remove/recreate the database
-	echo -e "\n${TEAL}Dropping/replacing database..."
-	dropAndCreateProcessMakerDatabase;
-
-	cd "$HOME"/code;
-
-	# Remove the current codebase
-	if [ -d ./processmaker ]; then
-		echo -e "\n${TEAL}Removing old codebase..."
-		rm -rf ./processmaker;
-	fi
-
-	# Clone down the repo and
-	# If an argument is passed, then use that
-	# to represent the desired branch
-	echo -e "\n${TEAL}Cloning core repo..."
-	if [ ! -z "$1" ]; then
-		gcr processmaker "$1";
-	else
-		gcr processmaker;
-	fi
-
-	# Install composer dependencies
-	cd processmaker
-	echo -e "\n${TEAL}Installing composer dependencies..."
-	composer install -o --quiet --no-interaction
-	composer dumpautoload -o --no-interaction
-
-	# Install npm dependencies
-	echo -e "\n${TEAL}Installing npm dependencies..."
-	npm i
-
-	# Copy over the local versions of a couple
-	# files so we can develop locally
-	echo -e "\n${TEAL}Copying local files..."
-	copyFilesToProcessMakerRepoForLocalDev
-	
-	# Run the installation process 
-	# (pi is a function defined below)
-	echo -e "\n${TEAL}Running artisan installation process..."
-
-	# If the branch for core is 4.1-develop, then
-	# adjust the install process to only include commands
-	# available for the install command in 4.1-develop
-	if [ ! -z "$1" ]; then
-		if [ "$1" = "4.1-develop" ]; then
-			pidevelop;
-        	else
-			pi;
-		fi
-	else
-		pi;
-	fi	
-
-	# Restart horizon
-	echo -e "\n${TEAL}Restarting horizon and echo server..."
-	supervisorctl start all
-
-	echo "\n";
-	echo -e "${GREEN}**********************************";
-	echo -e "${GREEN}*********** Finished! ************";
-	echo -e "${GREEN}**********************************";
-}
-
-function checkPackages() {
-	 cd "$HOME"/packages/composer/processmaker
-
-        for d in */ ; do
-                cd "$d"
-		echo "$d"
-		git status
-                cd ..
-                echo "\n"
-        done
-
-}
-
-##
-# Pull down latest for each package
-##
-function gitPullPackages() {
-	cd "$HOME"/packages/composer/processmaker
-
-	RED='\033[0;31m'
-
-	for d in */ ; do
-		cd "$d"
-		git reset --hard
-
-		if [ ! -z "$1" ]; then
-		    if [ "$1" = "4.1-develop" ]; then
-		        git checkout 4.1-develop
-		    else
-			echo -e "${RED}************************************************"
-			echo -e "${RED}* Skipping $d"
- 			echo -e "${RED}************************************************"
-		        continue
-		    fi
-		else
-		    git checkout $(getDefaultGitBranchName)
-		fi
-
-		git fetch --all
-		git pull --force
-		cd ..
-		echo "\n"
-	done
-
-	echo "All packages up to do date with GitHub";
-}
-
-##
-# Get default branch
-##
-function getDefaultGitBranchName() {
-	git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'
-}
-
-##
-# Drops 'processmaker' database (in MySQL) and
-# creates a new one with the same name
-##
-function dropAndCreateProcessMakerDatabase() {
-	# Drop the processmaker database
-	mysql -u root <<EOFMYSQL
-DROP DATABASE processmaker;
-EOFMYSQL
-	# Create the new one
-	mysql -u root <<EOFMYSQL
-CREATE DATABASE processmaker;
-EOFMYSQL
-}
-
-##
-# Runs the ProcessMaker core install Artisan command
-##
-function pi() {
-        php artisan processmaker:install --app-debug \
-                                 --telescope \
-                                 --db-username=root \
-				 --db-host=127.0.0.1 \
-				 --db-port=3306 \
-				 --data-driver=mysql \
-                                 --db-name=processmaker \
-                                 --url=http://processmaker.test \
-                                 --password=12345678 \
-                                 --email=alex.runyan@processmaker.test \
-                                 --username=admin \
-                                 --first-name=Alex \
-                                 --last-name=Runyan \
-                                 --redis-client=phpredis \
-				 --redis-host=127.0.0.1 \
-				 --session-domain="";
-	
-	# Append necessary variables to .env file
-        appendVarsToProcessMakerEnvForLocalDev
-}
-
-function pidevelop() {
-        php artisan processmaker:install --app-debug \
-                                 --telescope \
-                                 --db-username=root \
-                                 --db-host=127.0.0.1 \
-                                 --db-port=3306 \
-                                 --db-username=root \
-                                 --db-host=127.0.0.1 \
-                                 --db-port=3306 \
-                                 --data-driver=mysql \
-                                 --db-name=processmaker \
-                                 --url=http://processmaker.test \
-                                 --password=12345678 \
-                                 --email=alex.runyan@processmaker.test \
-                                 --username=admin \
-                                 --first-name=Alex \
-                                 --last-name=Runyan \
-                                 --redis-client=phpredis \
-                                 --redis-host=127.0.0.1;
-
-        # Append necessary variables to .env file
-        appendVarsToProcessMakerEnvForLocalDev
-}
-
-function installBrewCasksFromDotfiles() {
-	cd "$HOME"/.config/dotfiles
-
-	# Turn off Homebrew's analytics
-	brew analytics off 
-
-	# Install cli/formula
-	if [ -f ./.brew-formula ]; then
-                while read line; do
-                        brew install --formula "$line"
-                done < ./.brew-formula
-        fi
-
-	# Install apps (aka casks)
-	if [ -f ./.brew-casks ]; then
-		while read line; do
-			brew install --cask "$line"
-		done < ./.brew-casks
-	fi
-}
-
-##
-# Remove composer packages
-##
-function composerRemoveAllPM() {
-	cd "$HOME"/code/processmaker
-
-	if [ -f "$HOME"/packages/composer/.processmaker-packages ]; then
-		while read line; do
-                        GREEN='\033[0;32m'
-
-                        echo -e "${GREEN}Running package uninstall command...\n"
-                        /opt/homebrew/bin/php artisan "$line":uninstall > /dev/null 2>&1;
-
-                        echo -e "${GREEN}Composer removal of processmaker/$line...\n"
-                        composer remove processmaker/"$line" --quiet
-
-                        echo "\n"
-
-                done <"$HOME"/packages/composer/.processmaker-packages
-        fi
-}
-
-##
-# Require (as composer) all available PM packages
-##
-function composerRequireAllPM() {
-	cd "$HOME"/code/processmaker
-	
-	if [ ! -z "$1" ]; then
-		PACKAGES_FILE="$HOME"/packages/composer/.processmaker-packages-41
-	else
-		PACKAGES_FILE="$HOME"/packages/composer/.processmaker-packages
-	fi
-	
-	if [ -f "$PACKAGES_FILE" ]; then
-                while read line; do
-			GREEN='\033[0;32m'
-			RED='\033[0;31m'
-			TEAL='\033[0;36m'
-
-			echo -e "${TEAL}Composer installation of processmaker/$line...";
-			composer require processmaker/"$line" --quiet --no-interaction
-
-			if [ -d ./vendor/processmaker/"$line" ]; then
-                        	echo -e "${GREEN}Running package install command...";
-                        	/opt/homebrew/bin/php artisan "$line":install --no-interaction
-                        	
-				echo -e "${GREEN}Publishing package assets...";
-                        	/opt/homebrew/bin/php artisan vendor:publish --tag="$line" --no-interaction
-                        
-				echo -e "${GREEN}Package: processmaker/$line installed!";
-			else
-				echo "${RED}Something went wrong installing ${line}";
-				return 1;
-			fi
-
-			echo "\n";
-
-                done <"$PACKAGES_FILE"
-        fi
-
-	# For some reason, we also need to manually publish
-	# the vendor assets for the savedsearch package
-	if [ -d ./vendor/processmaker/package-savedsearch ]; then
-		/opt/homebrew/bin/php artisan vendor:publish --tag=package-savedsearch --quiet
-	fi
-}
-
-##
-# Clone all packages from ProcessMaker
-##
-function cloneAllPM() {
-	# If an argument is present, then assume it's the
-	# path to the packages directory, otherwise use
-	# the a default path
-	if [ ! -z "$1" ]; then
-		cd "$1"
-	else
-		cd "$HOME"/packages/composer/processmaker
-	fi
-
-	if [ -f ../.processmaker-packages ]; then
-		while read line; do
-			GREEN='\033[0;32m'
-			echo -e "${GREEN}Cloning $line..."
-			gcr $line
-			cd $line
-			git checkout $(getDefaultGitBranchName)
-			cd ..
-			echo "\n"
-		done <../.processmaker-packages
-	fi
-}
-
-##
 # Clone a ProcessMaker GitHub repo
+##
 function gcr() {
 	git clone https://github.com/ProcessMaker/"$1".git
 
@@ -327,64 +15,13 @@ function gcr() {
 	fi
 }
 
-copyFilesToProcessMakerRepoForLocalDev() {
-	PROCESSMAKER_PATH="$HOME"/code/processmaker
-
-	# Delete any existing symlink to PHPStorms'
-	# settings repository
-	if [ -L "$PROCESSMAKER_PATH"/.idea ]; then
-	    rm -rf "$PROCESSMAKER_PATH"/.idea
-	fi
-
-	# Symlink it
-	ln -s "$HOME"/.config/dotfiles/.idea "$PROCESSMAKER_PATH"/.idea
-
-	# Symlink in the logs so we can view them
-	# with the rest of the logs in ~/logs
-	if [ ! -L "$HOME"/logs/processmaker ]; then
-	    ln -s "$PROCESSMAKER_PATH"/storage/logs "$HOME"/logs/processmaker
-	fi 
-}
-
-appendVarsToProcessMakerEnvForLocalDev() {
-	if [ -f "$HOME"/code/processmaker/.env ]; then
-		# Remove incorrect, preset vars
-		sed -i '' '/SESSION_DOMAIN=http:\/\/processmaker.test/d' ~/code/processmaker/.env
-		sed -i '' '/DOCKER_HOST_URL=http:\/\/processmaker.test/d' ~/code/processmaker/.env
-		sed -i '' '/APP_ENV=production/d' ~/code/processmaker/.env
-
-		# Append other necessary vars
-		echo "APP_ENV=local" >> ~/code/processmaker/.env
-		echo "SESSION_DRIVER=redis" >> ~/code/processmaker/.env
-		echo "CACHE_DRIVER=redis" >> ~/code/processmaker/.env
-		echo "PROCESSMAKER_SCRIPTS_TIMEOUT=/opt/homebrew/bin/timeout" >> ~/code/processmaker/.env
-		echo "DOCKER_HOST_URL=http://host.docker.internal" >> ~/code/processmaker/.env
-		echo "SESSION_SECURE_COOKIE=false" >> ~/code/processmaker/.env
-		echo "SESSION_DOMAIN=processmaker.test" >> ~/code/processmaker/.env
-		echo "LARAVEL_ECHO_SERVER_PROTO=http" >> ~/code/processmaker/.env
-		echo "LARAVEL_ECHO_SERVER_SSL_KEY=\"\"" >> ~/code/processmaker/.env
-		echo "LARAVEL_ECHO_SERVER_SSL_CERT=\"\"" >> ~/code/processmaker/.env
-		echo "API_SSL_VERIFY=0" >> ~/code/processmaker/.env
-		echo "NODE_BIN_PATH=/opt/homebrew/bin/node" >> ~/code/processmaker/.env
-		echo "TELESCOPE_JOB_WATCHER=false" >> ~/code/processmaker/.env
-	fi
-}
-
-convertVideosToGifs() {
+function convertVideosToGifs() {
 	for f in ./*.mp4; do
 		ffmpeg -i "$f" -vf scale=320:-1 "${f%.*}.gif"
 	done
 }
 
-runDockerComposeUp() {
-    if [[ -d ./docker ]]; then
-        cd ./docker
-    fi
-
-    docker-compose up --detach --build
-}
-
-cloneAll() {
+function cloneAll() {
     # Make the url to the input github organization's repository page.
     ORG_URL="https://api.github.com/orgs/${1}/repos?per_page=200";
 
@@ -399,32 +36,27 @@ cloneAll() {
 }
 
 function killDns() {
-        sudo killall -HUP mDNSResponder;
-        echo "DNS responder service restarted"
+    sudo killall -HUP mDNSResponder;
+    echo "DNS responder service restarted"
 }
 
 function stopWebServicesQuiet() {
 	sudo echo "Stopping dev services...";
-
-        sudo brew services stop --quiet --all > /dev/null 2>&1;
+	sudo brew services stop --quiet --all > /dev/null 2>&1;
 	brew services stop --quiet --all > /dev/null 2>&1;
-	
 	supervisorctl stop --all --quiet > /dev/null 2>&1 &
-	
 	sudo killall -9 php > /dev/null 2>&1 &
 	sudo killall -9 mysql > /dev/null 2>&1 &
 	sudo killall -9 node > /dev/null 2>&1 &
-	
 	wait
-	
 	valet services
 }
 
 function startWebServices() {
 	brew services run --quiet mysql &
 	brew services run --quiet redis &
-        brew services run --quiet supervisor &
+	brew services run --quiet supervisor &
 	valet start &
 	wait
-	valet services;
+	valet services
 }
