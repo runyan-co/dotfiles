@@ -21,6 +21,7 @@ alias grep="rg"
 alias ls="exa"
 alias la="exa -ag"
 alias l="exa -lahg"
+alias taill="tailWithFormatting"
 
 # Terminal
 alias c="clear"
@@ -40,6 +41,7 @@ alias etc="cd /opt/homebrew/etc"
 
 # System admin
 alias htop="sudo htop --delay=5"
+alias mysqladmin="mysqladmin -u root"
 alias ps="procs"
 alias s="valet services"
 alias stopua="sudo killall -9 UA\ Mixer\ Engine"
@@ -61,6 +63,9 @@ alias co="composer dumpautoload -o"
 alias cu="composer update -o"
 alias c-off="mv ~/.composer/config.json ~/.composer/config.json.bak; mv ~/.composer/config-default.json ~/.composer/config.json"
 alias c-on="mv ~/.composer/config.json ~/.composer/config-default.json; mv ~/.composer/config.json.bak ~/.composer/config.json"
+
+# Docker-related
+alias pm-docker-setup="pmDockerSetup"
 
 # Laravel
 alias a="php artisan"

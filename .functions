@@ -2,6 +2,33 @@
 # Functions
 # -------------------------------------------------------------- //
 
+
+##
+# Removes existing openapitools/openapi-generator-cli images and
+# pulls down the correct version, and tags it with a backwards-compatible
+# version for use in processmaker/processmaker v4.1.27
+##
+function pmDockerSetup() {
+  IMAGE=openapitools/openapi-generator-cli
+
+  docker rmi "$IMAGE":v5.1.1 --force > /dev/null 2>&1;
+  docker rmi "$IMAGE":v4.2.2 --force > /dev/null 2>&1;
+
+  docker pull "$IMAGE":v5.1.1 > /dev/null 2>&1;
+  docker tag "$IMAGE":v5.1.1 "$IMAGE":v4.2.2 > /dev/null 2>&1;
+
+  echo "$IMAGE images successfully setup"
+}
+
+
+##
+# Use bat under the hood to format/stylize the file contents output
+##
+function tailWithFormatting() {
+    tail -f "$1" | bat --paging=never -l log
+}
+
+
 ##
 # Clone a ProcessMaker GitHub repo
 ##

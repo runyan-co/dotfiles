@@ -8,48 +8,40 @@ if (!$app instanceof \Silly\Application) {
     return;
 }
 
+use \Illuminate\Support\Str;
+
 use function \Valet\info;
 use function \Valet\output;
 use function \Valet\table;
 
  $app->command('services', function () {
 
-     $statuses = collect();
+     $output = CommandLine::runAsUser('brew services & sudo brew services', static function ($exitCode, $output) {
+         throw new DomainException('Brew was unable to check which services are running.');
+     });
 
-     foreach (['brew services', 'sudo brew services'] as $command) {
-         $command = "$command | grep started | awk '{ print $1; print $2; print $3; }'";
-
-         $result = CommandLine::runAsUser($command, static function ($exitCode, $output) {
-             throw new DomainException('Brew was unable to check which services are running.');
-         });
-
-         $statuses->push(collect(
-             array_filter(explode(PHP_EOL, $result))
-         )->chunk(3));
-     }
-
-     $cliTableValues = [];
-
-     foreach ($statuses as $statusByUser) {
-         foreach ($statusByUser as $serviceStatus) {
-             $array = collect($serviceStatus)->values();
-
-             $cliTableValues[] = [
-                 'service' => $array->get(0),
-                 'status' => $array->get(1),
-                 'user' => \Illuminate\Support\Str::contains($user = $array->get(2), '.plist') ? 'current user': $user
-             ];
+     $output = array_filter(explode(PHP_EOL, $output), static function ($line) {
+         if (blank($line)) {
+             return false;
          }
-     }
 
-        $services = array_map(static function ($row) {
-            return \Illuminate\Support\Str::replace('started', '<info>started</info>', $row);
-        }, $cliTableValues);
+         if (Str::contains($line, ['Name', 'Status', 'User', 'File'])) {
+             return false;
+         }
 
-        if (empty($services)) {
-            return info('No running services.');
-        }
+         return Str::contains($line, 'started');
+     });
 
-        table(['Service', 'Status', 'User'], $services);
+     $output = array_map(static function ($line) {
+         return [
+             'name' => Str::remove(" ", Str::before($line, 'started')),
+             'user' => Str::contains($line, 'root /') ? 'root' : 'current user',
+             'status' => '<info>started</info>',
+         ];
+     }, $output);
+
+     table(['Name', 'User', 'Status'], $output);
+
+     exit($exitCode ?? 0);
 
     })->descriptions('All running homebrew services');
