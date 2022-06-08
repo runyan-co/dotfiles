@@ -40,8 +40,13 @@ use function \Valet\table;
          ];
      }, $output);
 
-     table(['Name', 'User', 'Status'], $output);
+     if (blank($output)) {
+         output('<comment>No running services</comment>');
+     } else {
+         table(['Name', 'User', 'Status'], $output);
+     }
 
      exit($exitCode ?? 0);
 
     })->descriptions('All running homebrew services');
+
