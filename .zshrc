@@ -25,6 +25,7 @@ eval "$(zoxide init zsh)"
 # -------------------------------------------------------------- //
 
 # Node Version Manager
+# (uncomment the two lines below to use nvm)
 #export NVM_DIR="$HOME/.nvm"
 #[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
