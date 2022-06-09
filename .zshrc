@@ -40,6 +40,9 @@ PATH="/opt/homebrew/opt/mysql@8/bin:$PATH"
 # Composer
 export PATH="$HOME/.composer/vendor/bin:$PATH"
 
+# Sets the githubtoken
+source $HOME/.config/dotfiles/.bootstrap
+
 # Custom Zsh Functions
 source $HOME/.config/dotfiles/.functions
 
