@@ -12,7 +12,6 @@ alias dotfiles="cd $HOME/.config/dotfiles"
 
 # Filesystem
 alias bamchmod="stat -f \"%OLp\""
-alias cat="bat"
 alias cd="z"
 alias disableDsStore="defaults write com.apple.desktopservices DSDontWriteNetworkStores true"
 alias enableDsStore="defaults write com.apple.desktopservices DSDontWriteNetworkStores false"
@@ -65,9 +64,18 @@ alias co="composer dumpautoload -o"
 alias cu="composer update -o"
 alias c-off="mv ~/.composer/config.json ~/.composer/config.json.bak; mv ~/.composer/config-default.json ~/.composer/config.json"
 alias c-on="mv ~/.composer/config.json ~/.composer/config-default.json; mv ~/.composer/config.json.bak ~/.composer/config.json"
+alias vicomposer="vi ~/.composer/config.json"
 
 # Docker-related
 alias pm-docker-setup="pmDockerSetup"
+alias clear-containers="rmDockerContainers"
+alias docker-logs="getDockerLogs"
+alias rm-node-ssr="rmNodeSsrImage"
+alias docker_build="dockerBuild"
+alias di="docker image ls"
+alias dp="docker ps"
+alias flush_docker="flushDocker"
+alias build="buildProcessMakerDockerImages"
 
 # Laravel
 alias a="php artisan"

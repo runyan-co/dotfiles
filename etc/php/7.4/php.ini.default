@@ -3,7 +3,6 @@
 ;;;;;;;;;;;;;;;;;;;
 ; About php.ini   ;
 ;;;;;;;;;;;;;;;;;;;
-
 ; PHP's initialization file, generally called php.ini, is responsible for
 ; configuring many of the aspects of PHP's behavior.
 
@@ -257,7 +256,7 @@ output_buffering = 4096
 ; Note: You need to use zlib.output_handler instead of the standard
 ;   output_handler, or otherwise the output will be corrupted.
 ; http://php.net/zlib.output-compression
-zlib.output_compression = On
+zlib.output_compression = Off
 
 ; http://php.net/zlib.output-compression-level
 ;zlib.output_compression_level = -1
@@ -377,7 +376,7 @@ zend.exception_ignore_args = Off
 ; threat in any way, but it makes it possible to determine whether you use PHP
 ; on your server or not.
 ; http://php.net/expose-php
-expose_php = Off
+expose_php = On
 
 ;;;;;;;;;;;;;;;;;;;
 ; Resource Limits ;
@@ -386,7 +385,7 @@ expose_php = Off
 ; Maximum execution time of each script, in seconds
 ; http://php.net/max-execution-time
 ; Note: This directive is hardcoded to 0 for the CLI SAPI
-max_execution_time = 60
+max_execution_time = 30
 
 ; Maximum amount of time each script may spend parsing request data. It's a good
 ; idea to limit this time on productions servers in order to eliminate unexpectedly
@@ -506,7 +505,7 @@ log_errors = On
 ; Set maximum length of log_errors. In error_log information about the source is
 ; added. The default is 1024 and 0 allows to not apply any maximum length at all.
 ; http://php.net/log-errors-max-len
-log_errors_max_len = 0
+log_errors_max_len = 1024
 
 ; Do not log repeated messages. Repeated errors must occur in same file on same
 ; line unless ignore_repeated_source is set true.
@@ -872,7 +871,7 @@ allow_url_include = Off
 
 ; Default timeout for socket based streams (seconds)
 ; http://php.net/default-socket-timeout
-default_socket_timeout = 600
+default_socket_timeout = 60
 
 ; If your scripts have to deal with files from Macintosh systems,
 ; or you are running on a Mac and need to deal with files from
@@ -880,7 +879,7 @@ default_socket_timeout = 600
 ; automatically detect the EOL character in those files so that
 ; fgets() and file() will work regardless of the source of the file.
 ; http://php.net/auto-detect-line-endings
-auto_detect_line_endings = On
+;auto_detect_line_endings = Off
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ; Dynamic Extensions ;
@@ -904,6 +903,50 @@ auto_detect_line_endings = On
 ; 'extension='php_<ext>.dll') is supported for legacy reasons and may be
 ; deprecated in a future PHP major version. So, when it is possible, please
 ; move to the new ('extension=<ext>) syntax.
+;
+; Notes for Windows environments :
+;
+; - Many DLL files are located in the extensions/ (PHP 4) or ext/ (PHP 5+)
+;   extension folders as well as the separate PECL DLL download (PHP 5+).
+;   Be sure to appropriately set the extension_dir directive.
+;
+;extension=bz2
+;extension=curl
+;extension=ffi
+;extension=ftp
+;extension=fileinfo
+;extension=gd2
+;extension=gettext
+;extension=gmp
+;extension=intl
+;extension=imap
+;extension=ldap
+;extension=mbstring
+;extension=exif      ; Must be after mbstring as it depends on it
+;extension=mysqli
+;extension=oci8_12c  ; Use with Oracle Database 12c Instant Client
+;extension=odbc
+;extension=openssl
+;extension=pdo_firebird
+;extension=pdo_mysql
+;extension=pdo_oci
+;extension=pdo_odbc
+;extension=pdo_pgsql
+;extension=pdo_sqlite
+;extension=pgsql
+;extension=shmop
+
+; The MIBS data available in the PHP distribution must be installed.
+; See http://www.php.net/manual/en/snmp.installation.php
+;extension=snmp
+
+;extension=soap
+;extension=sockets
+;extension=sodium
+;extension=sqlite3
+;extension=tidy
+;extension=xmlrpc
+;extension=xsl
 
 ;;;;;;;;;;;;;;;;;;;
 ; Module Settings ;
@@ -1138,7 +1181,7 @@ mysqli.default_user =
 mysqli.default_pw =
 
 ; Allow or prevent reconnect
-mysqli.reconnect = On
+mysqli.reconnect = Off
 
 [mysqlnd]
 ; Enable / Disable collection of general statistics by mysqlnd which can be

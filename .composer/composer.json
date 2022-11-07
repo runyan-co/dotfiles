@@ -1,6 +1,8 @@
 {
     "require": {
         "runyan-co/pm": "^1.1",
-        "laravel/valet": "3.*"
+        "laravel/valet": "3.*",
+        "friendsofphp/php-cs-fixer": "^3.10",
+        "laravel/vapor-cli": "^1.44"
     }
 }

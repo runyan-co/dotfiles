@@ -4,97 +4,179 @@
 # Functions
 # -------------------------------------------------------------- //
 
+buildProcessMakerDockerImages() {
+  if [ -f ./build-images.sh ]; then
+    /bin/bash build-images.sh $@
+  else
+    echo \"Build script not found\"
+  fi
+}
+
+##
+# Docker Build
+##
+dockerBuild() {
+  DOCKER_BUILDKIT=0 docker image build $@
+}
+
+##
+# Show available global package updates with homebrew, composer, and npm
+##
+run_updates() {
+  echo "Homebrew updates..."
+  brew update --force
+
+  echo "Composer updates..."
+  composer global update --optimize-autoloader --no-cache
+
+  echo "oh-my-zsh updates..."
+  omz update
+}
+
 ##
 # Removes existing openapitools/openapi-generator-cli images and
 # pulls down the correct version, and tags it with a backwards-compatible
 # version for use in processmaker/processmaker v4.1.27
 ##
-function pmDockerSetup() {
+pmDockerSetup() {
   IMAGE=openapitools/openapi-generator-cli
 
-  docker rmi "$IMAGE":v5.1.1 --force > /dev/null 2>&1;
-  docker rmi "$IMAGE":v4.2.2 --force > /dev/null 2>&1;
+  flushDocker;
 
-  docker pull "$IMAGE":v5.1.1 > /dev/null 2>&1;
-  docker tag "$IMAGE":v5.1.1 "$IMAGE":v4.2.2 > /dev/null 2>&1;
+  # Pull down the image version we want and tag it so
+  # the processmaker/processmaker@v4.1.27 will use the
+  # tagged version which allows compatability on the M1
+  docker pull "$IMAGE":v5.1.1
+  docker tag "$IMAGE":v5.1.1 "$IMAGE":v4.2.2
 
-  echo "$IMAGE images successfully setup"
+  echo "\n"
+  echo "Done!"
 }
 
+##
+# Clear docker's system cache, prune the networks,
+# prune/kill/rm containers, aka remove everything but
+# the openapi-generator image
+##
+flushDocker() {
+  flushDocker-7e8c113f1ccd;
+
+  echo "Done!";
+}
+
+##
+# "Internal" function (which then allows us to redirect STDOUT to /dev/null)
+# for removing all images, containers (running or not)
+##
+flushDocker-7e8c113f1ccd() {
+  # Don't delete the openapi-generator containers
+  OPENAPI_IMAGE="openapitools/openapi-generator-cli"
+
+  # Iterate through and kill each container
+  for DOCKER_PID in $(docker ps | grep -v IMAGE | awk '{ print $1; }'); do
+    docker kill "$DOCKER_PID"
+  done
+
+  # Remove existing image, except for the
+  # openapi-generator image
+  for DOCKER_IMAGE in $(docker image ls | grep -v "$OPENAPI_IMAGE" | grep -v IMAGE | awk '{ print $3; }'); do
+    docker rmi "$DOCKER_IMAGE" --force
+  done
+
+  # Clean up
+  docker system prune --force
+  docker volume prune --force
+  docker network prune --force
+}
+
+##
+# Hack-y way of force removing all running containers
+##
+rmDockerContainers() {
+  for DOCKER_CONTAINER in $(docker container ps --quiet); do
+    docker container rm "$DOCKER_CONTAINER" --force
+  done
+}
+
+##
+# Hack-y way of getting all running container logs
+##
+getDockerLogs() {
+  for DOCKER_CONTAINER in $(docker container ps --quiet); do
+    docker logs --details "$DOCKER_CONTAINER"
+  done
+}
 
 ##
 # Use bat under the hood to format/stylize the file contents output
 ##
-function tailWithFormatting() {
+tailWithFormatting() {
   tail -f "$1" | bat --paging=never -l log
 }
-
 
 ##
 # Clone a ProcessMaker GitHub repo
 ##
-function gcr() {
-  git clone https://github.com/processmaker/"$1".git
+gcr() {
+  git clone https://github.com/ProcessMaker/"$1".git
   if [ ! -z "$2" ]; then cd "$1" && git checkout "$2" && cd ..; fi
 }
 
 ##
-# Use ffmpeg to convert any found mp4 files in the 
+# Use ffmpeg to convert any found mp4 files in the
 # current working directory to GIFs
 ##
-function convertVideosToGifs() {
+convertVideosToGifs() {
   for f in ./*.mp4; do ffmpeg -i "$f" -vf scale=320:-1 "${f%.*}.gif"; done
 }
-
 
 ##
 # Clone all repositories for a given GitHub organization
 ##
-function cloneAll() {
+cloneAll() {
   # Make the url to the input github organization's repository page.
-  ORG_URL="https://api.github.com/orgs/${1}/repos?per_page=200";
+  ORG_URL="https://api.github.com/orgs/${1}/repos?per_page=200"
 
   # List of all repositories of that organization (seperated by newline-eol).
-  ALL_REPOS=$(curl -s ${ORG_URL} | grep html_url | awk 'NR%2 == 0' | cut -d ':' -f 2-3 | tr -d '",');
+  ALL_REPOS=$(curl -s ${ORG_URL} | grep html_url | awk 'NR%2 == 0' | cut -d ':' -f 2-3 | tr -d '",')
 
   # Clone all the repositories.
   for ORG_REPO in ${ALL_REPOS}; do git clone ${ORG_REPO}.git; done
 }
 
-
 ##
 # Restart the macOS DNS service
 ##
-function killDns() {
-  sudo killall -HUP mDNSResponder;
+killDns() {
+  sudo killall -HUP mDNSResponder
   echo "DNS responder service restarted"
 }
 
 ##
 # Stop local, running web services
 ##
-function stopWebServicesQuiet() {
+stopWebServicesQuiet() {
   sudo -v
   echo "Stopping dev services..."
-  
-  sudo brew services stop --quiet --all > /dev/null 2>&1
-  brew services stop --quiet --all > /dev/null 2>&1
-  
+
+  sudo brew services stop --quiet --all >/dev/null 2>&1
+  brew services stop --quiet --all >/dev/null 2>&1
+
   # Kill supervisor and any running supervised processes
-  supervisorctl stop --all --quiet > /dev/null 2>&1
-  
+  supervisorctl stop --all --quiet >/dev/null 2>&1
+
   # Kill any orphaned php processes
-  sudo killall -9 php > /dev/null 2>&1
+  sudo killall -9 php >/dev/null 2>&1
 }
 
 ##
 # Start local web services
 ##
-function startWebServices() {
+startWebServices() {
   valet start &
   brew services run --quiet mysql &
   brew services run --quiet redis &
   brew services run --quiet supervisor &
   wait
-  valet services;
+  valet services
 }

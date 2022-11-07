@@ -25,21 +25,25 @@ eval "$(zoxide init zsh)"
 # -------------------------------------------------------------- //
 
 # Node Version Manager
-# (uncomment the two lines below to use nvm)
+# (uncomment the two lines below to use nvm
 #export NVM_DIR="$HOME/.nvm"
 #[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
 # Homebrew
-PATH="/opt/homebrew/bin:$PATH"
+export PATH="/opt/homebrew/bin:$PATH"
 
 # Node
-PATH="/Users/alex/.nvm/versions/node/v16.15.0/bin:$PATH"
+export PATH="$HOME/.nvm/versions/node/v16.15.0/bin:$PATH"
 
 # MySQL
-PATH="/opt/homebrew/opt/mysql@8/bin:$PATH"
+export PATH="/opt/homebrew/opt/mysql@8/bin:$PATH"
 
 # Composer
 export PATH="$HOME/.composer/vendor/bin:$PATH"
+
+# PHP
+#export PATH="/opt/homebrew/opt/php@7.4/bin:$PATH"
+#export PATH="/opt/homebrew/opt/php@7.4/sbin:$PATH"
 
 # Sets the githubtoken
 source $HOME/.config/dotfiles/.bootstrap
