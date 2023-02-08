@@ -4,6 +4,30 @@
 # Functions
 # -------------------------------------------------------------- //
 
+jumpbox() {
+  JUMPBOX_CONTAINER_ID=$(docker ps | grep jumpbox | awk '{ print $1; }')
+    
+  if ! docker exec -it "$JUMPBOX_CONTAINER_ID" bash; then
+    echo "Could not find jumpbox container"
+  fi
+}
+
+dockerExec() {
+  docker exec -it $1 bash
+}
+
+installProcessMakerEnterprise() {
+  BRANCH=develop
+
+  if [ ! -z "$1" ]; then
+    BRANCH="$1"
+  fi
+
+  if pm core:reset -y -t -d "$BRANCH"; then
+     pm core:install-packages --branch="$BRANCH";
+  fi
+}
+
 buildProcessMakerDockerImages() {
   if [ -f ./build-images.sh ]; then
     /bin/bash build-images.sh $@
@@ -64,6 +88,8 @@ flushDocker() {
   echo "Done!";
 }
 
+
+
 ##
 # "Internal" function (which then allows us to redirect STDOUT to /dev/null)
 # for removing all images, containers (running or not)
@@ -79,7 +105,14 @@ flushDocker-7e8c113f1ccd() {
 
   # Remove existing image, except for the
   # openapi-generator image
-  for DOCKER_IMAGE in $(docker image ls | grep -v "$OPENAPI_IMAGE" | grep -v IMAGE | awk '{ print $3; }'); do
+  for DOCKER_IMAGE in \
+    $(docker image ls \
+    | grep -v "$OPENAPI_IMAGE" \
+    | grep -v ubuntu \
+    | grep -v mysql \
+    | grep -v redis \
+    | grep -v IMAGE \
+    | awk '{ print $3; }'); do
     docker rmi "$DOCKER_IMAGE" --force
   done
 
@@ -87,6 +120,11 @@ flushDocker-7e8c113f1ccd() {
   docker system prune --force
   docker volume prune --force
   docker network prune --force
+
+  # Check for base images and download if not already
+  for IMAGE in "ubuntu:22.04" "redis:7" "mysql:8"; do
+    echo "Pulling $IMAGE..." && docker pull -q "$IMAGE" >/dev/null 2>&1
+  done
 }
 
 ##
@@ -159,6 +197,7 @@ stopWebServicesQuiet() {
   sudo -v
   echo "Stopping dev services..."
 
+  supervisorctl stop all >/dev/null 2>&1
   sudo brew services stop --quiet --all >/dev/null 2>&1
   brew services stop --quiet --all >/dev/null 2>&1
 
@@ -174,6 +213,7 @@ stopWebServicesQuiet() {
 ##
 startWebServices() {
   valet start &
+  wait
   brew services run --quiet mysql &
   brew services run --quiet redis &
   brew services run --quiet supervisor &
