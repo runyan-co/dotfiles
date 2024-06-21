@@ -4,12 +4,106 @@
 # Functions
 # -------------------------------------------------------------- //
 
-jumpbox() {
-  JUMPBOX_CONTAINER_ID=$(docker ps | grep jumpbox | awk '{ print $1; }')
-    
-  if ! docker exec -it "$JUMPBOX_CONTAINER_ID" bash; then
-    echo "Could not find jumpbox container"
+down() {
+  CURRENT_DIR="$(pwd)";
+  cd "$HOME/docker/build-processmaker"
+  docker compose down;
+  cd "$CURRENT_DIR";
+}
+
+logs() {
+  CURRENT_DIR="$(pwd)"
+  cd "$HOME/docker/build-processmaker"
+  docker compose logs -f
+  cd "$CURRENT_DIR"
+}
+
+runPhpUnit() {
+  CURRENT_DIR="$(pwd)"
+  cd "$HOME/docker/build-processmaker"
+  bash -c "./run-phpunit $*"
+  cd "$CURRENT_DIR"
+}
+
+switchToNext() {
+  CURRENT_DIR="$(pwd)";
+  PACKAGES="$HOME/packages/composer/processmaker";
+
+  cd "$PACKAGES";
+
+  for DIRECTORY in $(ls); do
+    { cd "/Users/alex/packages/composer/processmaker/$DIRECTORY" && \
+        git fetch --all && \
+        git checkout next && \
+        git pull; }
+  done
+
+  cd "$CURRENT_DIR";
+  pm packages:status
+}
+
+runDumpServer() {
+  CURRENT_DIR="$(pwd)";
+  cd "$HOME/docker/build-processmaker" 
+  docker compose logs -f dump-server;
+  cd "$CURRENT_DIR";
+}
+
+
+restartAllDockerComposeServices() {
+  CURRENT_DIR="$(pwd)";
+
+  cd "$HOME/docker/build-processmaker"
+
+  if $(docker compose restart artisan web-backend queue scheduler); then
+    echo "Restarted processmaker queue, scheduler, and web-backend";
+  else
+    echo "Failed to restart web-backend, scheduler, or queue";
   fi
+  
+  cd "$CURRENT_DIR";
+}
+
+restartQueueService() {
+  CURRENT_DIR="$(pwd)";
+
+  cd "$HOME/docker/build-processmaker";
+
+  if $(docker compose restart queue); then
+    echo "Restarted queue";
+  else
+    echo "Failed to restart queue";
+  fi
+
+  cd "$CURRENT_DIR";
+}
+
+restartWebService() {
+  CURRENT_DIR="$(pwd)";
+
+  cd "$HOME/docker/build-processmaker"
+
+  if $(docker compose restart web-backend); then
+    echo "Restarted web-backend";
+  else
+    echo "Failed to restart web-backend";
+  fi
+
+ cd "$CURRENT_DIR";
+}
+
+phpFpmContainerId() {
+  docker ps | grep "php-fpm" | awk '{ print $1; }';
+}
+
+cmd() {
+  CURRENT_DIR="$(pwd)";
+
+  cd ~/docker/build-processmaker;
+
+  docker compose exec -it artisan $@;
+
+  cd "$CURRENT_DIR";
 }
 
 dockerExec() {
@@ -84,8 +178,6 @@ pmDockerSetup() {
 ##
 flushDocker() {
   flushDocker-7e8c113f1ccd;
-
-  echo "Done!";
 }
 
 
@@ -100,31 +192,24 @@ flushDocker-7e8c113f1ccd() {
 
   # Iterate through and kill each container
   for DOCKER_PID in $(docker ps | grep -v IMAGE | awk '{ print $1; }'); do
+    echo "Killing $DOCKER_PID..."
     docker kill "$DOCKER_PID"
   done
 
   # Remove existing image, except for the
   # openapi-generator image
-  for DOCKER_IMAGE in \
-    $(docker image ls \
-    | grep -v "$OPENAPI_IMAGE" \
-    | grep -v ubuntu \
-    | grep -v mysql \
-    | grep -v redis \
-    | grep -v IMAGE \
-    | awk '{ print $3; }'); do
+  for DOCKER_IMAGE in $(docker image ls | grep -v IMAGE | awk '{ print $3; }'); do
+    echo "Removing image $DOCKER_IMAGE..."
     docker rmi "$DOCKER_IMAGE" --force
   done
 
   # Clean up
+  echo "Cleaning up..."
   docker system prune --force
   docker volume prune --force
   docker network prune --force
 
-  # Check for base images and download if not already
-  for IMAGE in "ubuntu:22.04" "redis:7" "mysql:8"; do
-    echo "Pulling $IMAGE..." && docker pull -q "$IMAGE" >/dev/null 2>&1
-  done
+  echo "Done!"
 }
 
 ##

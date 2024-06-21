@@ -1,8 +1,10 @@
 {
     "require": {
-        "runyan-co/pm": "1.*",
-        "laravel/valet": "3.*",
+        "runyan-co/pm": "2.*",
+        "laravel/valet": "4.*",
         "friendsofphp/php-cs-fixer": "^3.10",
-        "laravel/installer": "^4.2"
+        "laravel/installer": "^4.2",
+        "nunomaduro/phpinsights": "^2.5",
+        "configured/haulable": "^0.4.0"
     }
 }

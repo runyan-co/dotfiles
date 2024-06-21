@@ -1,7 +1,6 @@
 # -------------------------------------------------------------- //
 # Oh-My-Zsh
 # -------------------------------------------------------------- //
-
 export ZSH="$HOME/.oh-my-zsh"
 export LANG=en_US.UTF-8
 
@@ -11,6 +10,7 @@ COMPLETION_WAITING_DOTS="true"
 plugins=(
   git
   colorize
+  z
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -29,11 +29,11 @@ eval "$(zoxide init zsh)"
 #export NVM_DIR="$HOME/.nvm"
 #[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-# Node
-export PATH="$HOME/.nvm/versions/node/v18.13.0/bin:$PATH"
+# Allows PHPStorm to launch from command line
+export PATH="/Applications/PhpStorm.app/Contents/MacOS:$PATH"
 
-# MySQL
-export PATH="/opt/homebrew/opt/mysql@8/bin:$PATH"
+# Java
+#export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 
 # Composer
 export PATH="$HOME/.composer/vendor/bin:$PATH"
@@ -51,5 +51,3 @@ source $HOME/.config/dotfiles/.aliases
 #  ssh-add ~/.ssh/id_rsa
 #  export RSA_ADDED=true
 #fi
-
-#export DOCKER_HOST=ssh://root@docker-remote:22
