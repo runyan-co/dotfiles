@@ -1,9 +1,0 @@
-[xdebug]
-zend_extension="/opt/homebrew/opt/php@7.4/pecl/20190902/xdebug.so"
-xdebug.start_with_request=yes
-xdebug.mode=debug
-xdebug.client_connect_back=1
-xdebug.client_port=9003
-xdebug.client_host=127.0.0.1
-xdebug.discover_client_host=1
-xdebug.idekey=PHPSTORM
