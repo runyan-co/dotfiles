@@ -34,10 +34,20 @@ alias zombies="ps axo stat,ppid,pid,comm | grep -w defunct"
 # Network
 alias myip="curl -4 ifconfig.co/ip"
 alias killdns="killDns"
-alias ping="gping"
+#alias ping="gping"
 
 # Composer-related
 alias ci="composer install -o"
 alias co="composer dumpautoload -o"
 alias cu="composer update -o"
 
+# Laravel-related
+alias tinker="php artisan tinker"
+alias artisan="php artisan"
+
+# MySQL-related
+alias start_mysql="$MYSQL_DOCKER_COMPOSE_DIR/start_mysql.sh"
+alias stop_mysql="$MYSQL_DOCKER_COMPOSE_DIR/stop_mysql.sh"
+
+# QuoteVelocity related
+alias a="sourceAliases"

@@ -72,15 +72,24 @@ ZSH_THEME="robbyrussell"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
 
+# oh-my-zsh shell init
 source $ZSH/oh-my-zsh.sh
-
 eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# Custom env vars
+source "$HOME/.config/dotfiles/env.sh"
+
+# Global composer executables
+export PATH="$HOME/.composer/vendor/bin:$PATH"
 
 # Custom aliases
 source "$HOME/.config/dotfiles/aliases.sh"
 
 # Custom bash functions
 source "$HOME/.config/dotfiles/functions.sh"
+
+# Source repo-specific aliases
+sourceAliases;
 
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -109,4 +118,11 @@ source "$HOME/.config/dotfiles/functions.sh"
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+#
+# nvm
+#
+#export NVM_DIR="$HOME/.nvm"
+#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 

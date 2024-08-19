@@ -1,0 +1,25 @@
+{
+  "repositories": [
+    {
+      "type": "path",
+      "url": "/Users/alex/packages/composer/runyan-co/*",
+      "options": {
+        "symlink": true
+      }
+    },
+    {
+      "type": "path",
+      "url": "/Users/alex/packages/composer/qvelocity/*",
+      "options": {
+        "symlink": true
+      }
+    },
+    {
+      "type": "path",
+      "url": "/Users/alex/packages/composer/beyondcode/*",
+      "options": {
+        "symlink": true
+      }
+    }
+  ]
+}
