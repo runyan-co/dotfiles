@@ -88,9 +88,6 @@ source "$HOME/.config/dotfiles/aliases.sh"
 # Custom bash functions
 source "$HOME/.config/dotfiles/functions.sh"
 
-# Source repo-specific aliases
-sourceAliases;
-
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
 

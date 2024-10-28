@@ -48,6 +48,3 @@ alias artisan="php artisan"
 # MySQL-related
 alias start_mysql="$MYSQL_DOCKER_COMPOSE_DIR/start_mysql.sh"
 alias stop_mysql="$MYSQL_DOCKER_COMPOSE_DIR/stop_mysql.sh"
-
-# QuoteVelocity related
-alias a="sourceAliases"
