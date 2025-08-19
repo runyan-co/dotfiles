@@ -85,9 +85,6 @@ plugins=(git)
 source $ZSH/oh-my-zsh.sh
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-# Custom env vars
-source "$HOME/.config/dotfiles/env.sh"
-
 # Global composer executables
 PATH="$HOME/.composer/vendor/bin:$PATH"
 export PATH="/Applications/PhpStorm.app/Contents/MacOS:$PATH"
